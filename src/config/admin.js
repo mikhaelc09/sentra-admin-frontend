@@ -7,7 +7,7 @@ AdminJS.registerAdapter({
     Resource:SequelizeAdapter.Resource,
     Database:SequelizeAdapter.Database
 })
-const adminJS = new AdminJS({
+const adminJsOptions = {
     resources: resources,
     rootPath: '/admin',
     branding: {
@@ -18,6 +18,8 @@ const adminJS = new AdminJS({
     assets:{
         // styles:["/sidebar.css"]
     }
-})
+}
+
+const adminJS = new AdminJS(adminJsOptions)
 
 export default adminJS

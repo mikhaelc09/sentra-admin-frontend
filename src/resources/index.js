@@ -9,17 +9,28 @@ import KaryawanResource from "./KaryawanResource.js";
 import LemburResource from "./LemburResource.js";
 import LokasiPentingResource from "./LokasiPentingResource.js";
 
+const no_parent = {
+    options:{
+        parent:{
+            name:'',
+            icon:'Home'
+        }
+    }
+}
+
 const resources = [
-    AbsensiResource,
-    DivisiResource,
-    DPenggajianResource,
-    HPenggajianResource,
-    IzinResource,
-    JadwalResource,
-    JabatanResource,
-    KaryawanResource,
-    LemburResource,
-    LokasiPentingResource,
+    {...AbsensiResource, ...no_parent},
+    {...DivisiResource, ...no_parent},
+    {...DPenggajianResource, ...no_parent},
+    {...HPenggajianResource, ...no_parent},
+    {...IzinResource, ...no_parent},
+    {...JadwalResource, ...no_parent},
+    {...JabatanResource, ...no_parent},
+    {...KaryawanResource, ...no_parent},
+    {...LemburResource, ...no_parent},
+    {...LokasiPentingResource, ...no_parent},
 ]
+
+console.log(resources)
 
 export default resources
