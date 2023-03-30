@@ -1,17 +1,13 @@
-import path from 'path';
-import express from 'express';
-import adminJS from './config/admin.js';
-import AdminJSExpress from '@adminjs/express';
-import { fileURLToPath } from 'url';
-const PORT = 3000
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import "./index.css";
 
-const app = express()
-const __filename = fileURLToPath(import.meta.url);
+import App from "./App";
 
-const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, "/")));
-app.use(adminJS.options.rootPath, AdminJSExpress.buildRouter(adminJS))
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}${adminJS.options.rootPath}`);
-})
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
