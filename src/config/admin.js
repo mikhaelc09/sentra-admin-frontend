@@ -11,12 +11,13 @@ const adminJsOptions = {
     resources: resources,
     rootPath: '/admin',
     branding: {
-        companyName: 'Sentra Medika Surabaya'
+        companyName: 'Sentra Medika Surabaya',
+        logo: '../assets/logo_white.png'
     },
     database:sequelize,
     adapter:SequelizeAdapter,
     assets:{
-        // styles:["/sidebar.css"]
+        styles:["../styles/sidebar.css"]
     }
 }
 
