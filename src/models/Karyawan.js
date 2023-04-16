@@ -1,56 +1,34 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
-
-class Karyawan extends Model {}
-Karyawan.init(
-    {
-      nik:{
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      nama:{
-        type: DataTypes.STRING(50),
-        allowNull: false
-      },
-      email:{
-        type: DataTypes.STRING(50),
-        allowNull: false
-      },
-      password:{
-        type: DataTypes.STRING(255),
-        allowNull: false
-      },
-      alamat:{
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      tanggal_lahir:{
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      no_telp:{
-        type: DataTypes.STRING(15),
-        allowNull: false
-      },
-      status:{
-        type: DataTypes.SMALLINT,
-        allowNull: false
-      },
-      keterangan:{
-        type: DataTypes.TEXT,
-      },
-      is_admin: {
-        type: DataTypes.SMALLINT,
-        allowNull: false
-      }
-    },
-    {
-      sequelize,
-      modelName: 'Karyawan',
-      tableName: 'Karyawan',
-      underscored: true,
-      timestamps:false
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Karyawan extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
     }
-);
-export default Karyawan;
+  }
+  Karyawan.init({
+    nik: DataTypes.STRING,
+    nama: DataTypes.STRING,
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    alamat: DataTypes.TEXT,
+    tanggal_lahir: DataTypes.DATE,
+    no_telp: DataTypes.STRING,
+    status: DataTypes.SMALLINT,
+    keterangan: DataTypes.TEXT,
+    is_admin: DataTypes.SMALLINT,
+    id_divisi: DataTypes.NUMBER,
+    id_jabatan: DataTypes.NUMBER
+  }, {
+    sequelize,
+    modelName: 'Karyawan',
+  });
+  return Karyawan;
+};

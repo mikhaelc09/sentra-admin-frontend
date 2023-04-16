@@ -1,7 +1,7 @@
-import Jadwal from '../models/Jadwal.js';
+const Jadwal = require('../models/Jadwal.js');
 
 const JadwalResource = {
     resource: Jadwal
 }
 
-export default JadwalResource;
+module.exports = JadwalResource;

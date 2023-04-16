@@ -1,7 +1,7 @@
-import LokasiPenting from '../models/LokasiPenting.js';
+const LokasiPenting = require('../models/LokasiPenting.js');
 
 const LokasiPentingResource = {
     resource: LokasiPenting
 }
 
-export default LokasiPentingResource;
+module.exports = LokasiPentingResource;

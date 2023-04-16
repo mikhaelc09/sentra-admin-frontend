@@ -1,7 +1,7 @@
-import Izin from '../models/Izin.js';
+const Izin = require('../models/Izin.js');
 
 const IzinResource = {
     resource: Izin
 }
 
-export default IzinResource;
+module.exports = IzinResource;

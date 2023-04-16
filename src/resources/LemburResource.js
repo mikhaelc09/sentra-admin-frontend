@@ -1,7 +1,7 @@
-import Lembur from '../models/Lembur.js';
+const Lembur = require('../models/Lembur.js');
 
 const LemburResource = {
     resource: Lembur
 }
 
-export default LemburResource;
+module.exports =LemburResource;

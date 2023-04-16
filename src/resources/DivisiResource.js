@@ -1,7 +1,7 @@
-import Divisi from '../models/Divisi.js';
+const Divisi = require('../models/Divisi.js');
 
 const DivisiResource = {
     resource: Divisi
 }
 
-export default DivisiResource;
+module.exports = DivisiResource;

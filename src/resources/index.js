@@ -1,13 +1,13 @@
-import AbsensiResource from "./AbsensiResource.js";
-import DivisiResource from "./DivisiResource.js";
-import DPenggajianResource from "./DPenggajianResource.js";
-import HPenggajianResource from "./HPenggajianResource.js";
-import IzinResource from "./IzinResource.js";
-import JabatanResource from "./JabatanResource.js";
-import JadwalResource from "./JadwalResource.js";
-import KaryawanResource from "./KaryawanResource.js";
-import LemburResource from "./LemburResource.js";
-import LokasiPentingResource from "./LokasiPentingResource.js";
+const AbsensiResource = require("./AbsensiResource.js");
+const DivisiResource = require("./DivisiResource.js");
+const DPenggajianResource = require("./DPenggajianResource.js");
+const HPenggajianResource = require("./HPenggajianResource.js");
+const IzinResource = require("./IzinResource.js");
+const JabatanResource = require("./JabatanResource.js");
+const JadwalResource = require("./JadwalResource.js");
+const KaryawanResource = require("./KaryawanResource.js");
+const LemburResource = require("./LemburResource.js");
+const LokasiPentingResource = require("./LokasiPentingResource.js");
 
 
 const resources = [
@@ -103,4 +103,4 @@ const resources = [
   },
 ];
 
-export default resources;
+module.exports = resources;

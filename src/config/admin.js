@@ -1,7 +1,7 @@
-import AdminJS from 'adminjs'
-import SequelizeAdapter from '@adminjs/sequelize'
-import sequelize from './database.js'
-import resources from '../resources/index.js';
+const AdminJS = require('adminjs');
+const SequelizeAdapter = require('@adminjs/sequelize');
+const sequelize = require('./database.js');
+const resources = require('../resources/index.js');
 
 AdminJS.registerAdapter({
     Resource:SequelizeAdapter.Resource,
@@ -23,4 +23,4 @@ const adminJsOptions = {
 
 const adminJS = new AdminJS(adminJsOptions)
 
-export default adminJS
+module.exports = adminJS

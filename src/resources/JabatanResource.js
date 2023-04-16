@@ -1,7 +1,7 @@
-import Jabatan from '../models/Jabatan.js';
+const Jabatan = require('../models/Jabatan.js');
 
 const JabatanResource = {
     resource: Jabatan
 }
 
-export default JabatanResource;
+module.exports = JabatanResource;

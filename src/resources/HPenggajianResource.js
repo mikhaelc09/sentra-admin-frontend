@@ -1,7 +1,7 @@
-import HPenggajian from '../models/HPenggajian.js';
+const HPenggajian = require('../models/HPenggajian.js');
 
 const HPenggajianResource = {
     resource: HPenggajian
 }
 
-export default HPenggajianResource;
+module.exports = HPenggajianResource;
