@@ -1,7 +1,7 @@
 const AdminJS = require('adminjs');
 const SequelizeAdapter = require('@adminjs/sequelize');
-const sequelize = require('./database.js');
-const resources = require('../resources/index.js');
+const sequelize = require('../models/index');
+const resources = require('./resource.js');
 
 AdminJS.registerAdapter({
     Resource:SequelizeAdapter.Resource,
@@ -10,6 +10,7 @@ AdminJS.registerAdapter({
 const adminJsOptions = {
     resources: resources,
     rootPath: '/admin',
+    logoutPath: '/admin/logout',
     branding: {
         companyName: 'Sentra Medika Surabaya',
         logo: '../assets/logo_white.png'
