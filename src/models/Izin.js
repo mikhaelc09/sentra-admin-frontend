@@ -34,14 +34,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     waktu_mulai: {
       allowNull: false,
-      type: DataTypes.TIME
+      type: DataTypes.DATEONLY
     },
     waktu_selesai: {
       allowNull: false,
-      type: DataTypes.TIME
+      type: DataTypes.DATEONLY
     },
     keterangan: {
       allowNull: false,
+      type: DataTypes.TEXT
+    },
+    lokasi: {
+      allowNull: true,
       type: DataTypes.TEXT
     },
     status: {
