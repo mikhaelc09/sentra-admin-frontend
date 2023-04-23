@@ -15,7 +15,6 @@ module.exports = {
         references: {model: 'karyawan', key: 'nik'}
       },
       nik_pengganti:{
-        allowNull: false,
         type: Sequelize.STRING(10),
         references: {model: 'karyawan', key: 'nik'}
       },
@@ -31,13 +30,19 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+      lokasi: {
+        allowNull: true,
+        type: DataTypes.TEXT
+      },
       status: {
         allowNull: false,
-        type: Sequelize.SMALLINT
+        type: Sequelize.SMALLINT,
+        comment: '0: Belum disetujui, 1: Disetujui, 2: Ditolak'
       },
       jenis: {
         allowNull: false,
-        type: Sequelize.SMALLINT
+        type: Sequelize.SMALLINT,
+        comment: '0: Cuti, 1: MCU'
       },
       created_at: {
         allowNull: false,

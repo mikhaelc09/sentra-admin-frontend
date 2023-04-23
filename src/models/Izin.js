@@ -28,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       // references: {model: 'karyawan', key: 'nik'}
     },
     nik_pengganti:{
-      allowNull: false,
       type: DataTypes.STRING(10),
       // references: {model: 'karyawan', key: 'nik'}
     },
@@ -50,11 +49,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       allowNull: false,
-      type: DataTypes.SMALLINT
+      type: DataTypes.SMALLINT,
+      comment: '0: Belum disetujui, 1: Disetujui, 2: Ditolak'
     },
     jenis: {
       allowNull: false,
-      type: DataTypes.SMALLINT
+      type: DataTypes.SMALLINT,
+      comment: '0: Cuti, 1: MCU'
     },
     created_at: {
       allowNull: false,
