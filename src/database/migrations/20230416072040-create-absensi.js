@@ -33,7 +33,7 @@ module.exports = {
       status: {
         allowNull: false,
         type: Sequelize.SMALLINT,
-        comment: '0: Belum disetujui, 1: Disetujui, 2: Ditolak'
+        comment: '0: Invalid, 1: Valid'
       },
       created_at: {
         allowNull: false,
