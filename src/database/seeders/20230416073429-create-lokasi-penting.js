@@ -75,7 +75,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
-        nama: 'JL. Raya tenggilis 135 B (SMS)',
+        nama: 'Jl. Raya Kalirungkut No. Kav 9-11',
         longitude: 112.77095,
         latitude: -7.31914,
         created_at: new Date(),
