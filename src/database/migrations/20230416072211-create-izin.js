@@ -32,7 +32,7 @@ module.exports = {
       },
       lokasi: {
         allowNull: true,
-        type: DataTypes.TEXT
+        type: Sequelize.TEXT
       },
       status: {
         allowNull: false,
