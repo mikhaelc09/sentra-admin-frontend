@@ -1,5 +1,5 @@
 'use strict';
-const faker = require('@faker-js/faker')
+const faker = require('@faker-js/faker').faker
 faker.setLocale('id_ID')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

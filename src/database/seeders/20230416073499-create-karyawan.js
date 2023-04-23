@@ -1,6 +1,6 @@
 'use strict';
 
-const faker = require('@faker-js/faker')
+const faker = require('@faker-js/faker').faker
 faker.setLocale('id_ID')
 
 const data = []
@@ -27,9 +27,9 @@ for (let i = 0; i < 10; i++) {
     email: email,
     password: '123',
     alamat: faker.address.streetAddress(),
-    tanggal_lahir: faker.date.birthDate(),
-    no_telp: faker.phone.number(),
-    no_rekening: faker.finance.creditCardNumber(),
+    tanggal_lahir: faker.date.birthdate(),
+    no_telp: faker.phone.number('###-###-####'),
+    no_rekening: faker.finance.creditCardNumber('##########'),
     nama_rekening: `${fn} ${ln}`,
     id_divisi: faker.datatype.number({ min: 1, max: 16}),
     status: 1,

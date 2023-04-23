@@ -1,6 +1,6 @@
 'use strict';
 
-const faker = require('@faker-js/faker')
+const faker = require('@faker-js/faker').faker
 faker.setLocale('id_ID')
 
 const data = []
@@ -20,49 +20,49 @@ const nik = [
 for (let i = 0; i < 10; i++) {
   data.push({
     nik: nik[i],
-    id_lokasi: faker.dataype.number({ min: 1, max: 11 }),
+    id_lokasi: faker.datatype.number({ min: 1, max: 11 }),
     hari: 'SENIN',
-    jam_kerja: faker.dataype.number({ min: 5, max: 10}),
+    jam_kerja: faker.datatype.number({ min: 5, max: 10}),
     created_at: new Date(),
     updated_at: new Date(),
   })
   data.push({
     nik: nik[i],
-    id_lokasi: faker.dataype.number({ min: 1, max: 11 }),
+    id_lokasi: faker.datatype.number({ min: 1, max: 11 }),
     hari: 'SELASA',
-    jam_kerja: faker.dataype.number({ min: 5, max: 10}),
+    jam_kerja: faker.datatype.number({ min: 5, max: 10}),
     created_at: new Date(),
     updated_at: new Date(),
   })
   data.push({
     nik: nik[i],
-    id_lokasi: faker.dataype.number({ min: 1, max: 11 }),
+    id_lokasi: faker.datatype.number({ min: 1, max: 11 }),
     hari: 'RABU',
-    jam_kerja: faker.dataype.number({ min: 5, max: 10}),
+    jam_kerja: faker.datatype.number({ min: 5, max: 10}),
     created_at: new Date(),
     updated_at: new Date(),
   })
   data.push({
     nik: nik[i],
-    id_lokasi: faker.dataype.number({ min: 1, max: 11 }),
+    id_lokasi: faker.datatype.number({ min: 1, max: 11 }),
     hari: 'KAMIS',
-    jam_kerja: faker.dataype.number({ min: 5, max: 10}),
+    jam_kerja: faker.datatype.number({ min: 5, max: 10}),
     created_at: new Date(),
     updated_at: new Date(),
   })
   data.push({
     nik: nik[i],
-    id_lokasi: faker.dataype.number({ min: 1, max: 11 }),
+    id_lokasi: faker.datatype.number({ min: 1, max: 11 }),
     hari: 'JUMAT',
-    jam_kerja: faker.dataype.number({ min: 5, max: 10}),
+    jam_kerja: faker.datatype.number({ min: 5, max: 10}),
     created_at: new Date(),
     updated_at: new Date(),
   })
   data.push({
     nik: nik[i],
-    id_lokasi: faker.dataype.number({ min: 1, max: 11 }),
+    id_lokasi: faker.datatype.number({ min: 1, max: 11 }),
     hari: 'SABTU',
-    jam_kerja: faker.dataype.number({ min: 5, max: 10}),
+    jam_kerja: faker.datatype.number({ min: 5, max: 10}),
     created_at: new Date(),
     updated_at: new Date(),
   })
