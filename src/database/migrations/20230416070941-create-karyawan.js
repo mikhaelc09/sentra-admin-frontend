@@ -50,7 +50,7 @@ module.exports = {
         type: Sequelize.SMALLINT
       },
       keterangan: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.TEXT
       },
       is_admin: {
