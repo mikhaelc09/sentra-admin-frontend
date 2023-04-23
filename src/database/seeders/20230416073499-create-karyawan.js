@@ -4,13 +4,25 @@ const faker = require('@faker-js/faker')
 faker.setLocale('id_ID')
 
 const data = []
+const nik = [
+  '1730864768',
+  '9963175781',
+  '1584121275',
+  '5302114083',
+  '3355937550',
+  '8516922861',
+  '5931879324',
+  '3320064458',
+  '1149715837',
+  '7944292755',
+]
 
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 10; i++) {
   const fn = faker.name.firstName()
   const ln = faker.name.lastName()
   const email = faker.internet.email(fn, ln);
   data.push({
-    nik: faker.random.numeric(10),
+    nik: nik[i],
     nama: `${fn} ${ln}`,
     email: email,
     password: '123',
