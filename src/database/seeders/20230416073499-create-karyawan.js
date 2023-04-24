@@ -3,6 +3,8 @@
 const faker = require('@faker-js/faker').faker
 faker.setLocale('id_ID')
 
+const bcrypt = require('bcrypt')
+
 const data = []
 const nik = [
   '1730864768',
@@ -25,7 +27,7 @@ for (let i = 0; i < 10; i++) {
     nik: nik[i],
     nama: `${fn} ${ln}`,
     email: email,
-    password: '123',
+    password: bcrypt.hashSync('123', 12),
     alamat: faker.address.streetAddress(),
     tanggal_lahir: faker.date.birthdate(),
     no_telp: faker.phone.number('###-###-####'),
