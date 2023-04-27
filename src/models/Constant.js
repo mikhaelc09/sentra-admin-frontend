@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class constant extends Model {
+  class Constant extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  constant.init({
+  Constant.init({
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(20),
       allowNull: false
     },
-    type: {
+    valuetype: {
       type: DataTypes.SMALLINT,
       allowNull: false,
       comment: '1: string, 2: integer, 3: float'
@@ -63,5 +63,5 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'constants',
     underscored: true,
   });
-  return constant;
+  return Constant;
 };

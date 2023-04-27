@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING(20),
         allowNull: false
       },
-      type: {
+      valuetype: {
         type: Sequelize.SMALLINT,
         allowNull: false,
         comment: '1: string, 2: integer, 3: float'
@@ -30,17 +30,17 @@ module.exports = {
       shortdesc: {
         type: Sequelize.STRING(50)
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
       },
-      deletedAt: {
+      deleted_at: {
         allowNull: true,
         type: Sequelize.DATE
       }

@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       allowNull: false,
-      type: Sequelize.SMALLINT,
+      type: DataTypes.SMALLINT,
       comment: '0: Belum disetujui, 1: Disetujui, 2: Ditolak'
     },
     created_at: {

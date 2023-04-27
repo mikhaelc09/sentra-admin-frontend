@@ -86,5 +86,9 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete("lokasi_penting", null, {});
+    await queryInterface.sequelize.query('ALTER TABLE lokasi_penting AUTO_INCREMENT = 1;');
+    await queryInterface.sequelize.query('ALTER TABLE jadwal AUTO_INCREMENT = 1;');
+    await queryInterface.sequelize.query('ALTER TABLE karyawan AUTO_INCREMENT = 1;');
+    await queryInterface.sequelize.query('ALTER TABLE divisi AUTO_INCREMENT = 1;');
   },
 };

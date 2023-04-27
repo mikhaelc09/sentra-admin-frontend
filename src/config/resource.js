@@ -8,6 +8,12 @@ const resources = [
         name: "Karyawan",
         icon: 'User',
       },
+      listProperties: ['email', 'created_at'],
+      properties:{
+        created_at:{
+          type:'date',
+        }
+      }
     },
   },
   {
