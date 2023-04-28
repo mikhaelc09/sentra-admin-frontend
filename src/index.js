@@ -10,7 +10,11 @@ const app = express()
 
 // const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "/")));
-app.use(adminJS.options.rootPath, AdminJSExpress.buildRouter(adminJS))
+const adminJSRouter = AdminJSExpress.buildRouter(adminJS)
+app.get('/admin/logout', (req, res) => {
+    res.redirect('/login')
+})
+app.use(adminJS.options.rootPath, adminJSRouter)
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}${adminJS.options.rootPath}`);
