@@ -1,8 +1,8 @@
 'use strict';
-const {
+import {
   Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+} from 'sequelize';
+export default (sequelize, DataTypes) => {
   class Jadwal extends Model {
     /**
      * Helper method for defining associations.
@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.Karyawan, { foreignKey: 'nik' });
+      console.log("karyawan done")
       this.belongsTo(models.LokasiPenting, { foreignKey: 'id_lokasi' });
+      console.log("lokasi done")
     }
   }
   Jadwal.init({

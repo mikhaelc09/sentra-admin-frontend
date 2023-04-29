@@ -1,14 +1,14 @@
-const path = require('path');
-const express = require('express');
-const adminJS = require('./config/admin.js');
-const AdminJSExpress = require('@adminjs/express');
-const { fileURLToPath } = require('url');
+import path from 'path';
+import express from 'express';
+import adminJS from './config/admin.js';
+import AdminJSExpress from '@adminjs/express';
+import { fileURLToPath } from 'url';
 const PORT = 3000
 
 const app = express()
-// const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
 
-// const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "/")));
 const adminJSRouter = AdminJSExpress.buildRouter(adminJS)
 app.get('/admin/logout', (req, res) => {

@@ -1,4 +1,4 @@
-const db = require('../models/index.js');
+import db from '../models/index.js';
 
 const resources = [
   {
@@ -94,4 +94,4 @@ const resources = [
 
 console.log(resources);
 
-module.exports = resources;
+export default resources;
