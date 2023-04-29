@@ -20,11 +20,11 @@ module.exports = {
       },
       waktu_mulai: {
         allowNull: false,
-        type: Sequelize.TIME
+        type: Sequelize.DATEONLY
       },
       waktu_selesai: {
         allowNull: false,
-        type: Sequelize.TIME
+        type: Sequelize.DATEONLY
       },
       keterangan: {
         allowNull: false,
