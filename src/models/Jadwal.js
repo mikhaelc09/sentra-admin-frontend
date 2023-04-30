@@ -12,9 +12,9 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.Karyawan, { foreignKey: 'nik' });
-      console.log("karyawan done")
+      // console.log("karyawan done")
       this.belongsTo(models.LokasiPenting, { foreignKey: 'id_lokasi' });
-      console.log("lokasi done")
+      // console.log("lokasi done")
     }
   }
   Jadwal.init({

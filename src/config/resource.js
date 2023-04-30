@@ -92,6 +92,6 @@ const resources = [
   },
 ];
 
-console.log(resources);
+// console.log(resources);
 
 export default resources;
