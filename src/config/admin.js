@@ -1,23 +1,25 @@
 import AdminJS from 'adminjs';
+import path from 'path';
 import SequelizeAdapter from '@adminjs/sequelize';
 import sequelize from '../models/index.js';
 import resources from './resource.js';
+import dirname from '../utils/pathUtils.js'
 const ComponentLoader = AdminJS.ComponentLoader
-
+console.log(ComponentLoader)
 const loader = new ComponentLoader()
-// const Components  = {
-//     Dashboard: loader.add('Dashboard', '../components/Dashboard.jsx')
-// }
-// console.log(Components)
-// console.log(loader)
+console.log(loader)
+const Components  = {
+    Dashboard: loader.add('Dashboard', path.join(dirname, './components/Dashboard.jsx'))
+}
+console.log(loader)
 AdminJS.registerAdapter({
     Resource:SequelizeAdapter.Resource,
     Database:SequelizeAdapter.Database
 })
 const adminJsOptions = {
-    // dashboard:{
-    //     component: Components.Dashboard
-    // },
+    dashboard:{
+        component: Components.Dashboard
+    },
     resources: resources,
     rootPath: '/admin',
     logoutPath: '/admin/logout',
