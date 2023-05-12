@@ -75,6 +75,10 @@ export default (sequelize, DataTypes) => {
     },
     id_divisi: {
       allownull: false,
+      references:{
+        model:'divisi',
+        key:'id'
+      },
       type: DataTypes.INTEGER,
       // references: {model: 'divisi', key: 'id'}
     },
@@ -83,7 +87,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.SMALLINT
     },
     keterangan: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.TEXT
     },
     is_admin: {

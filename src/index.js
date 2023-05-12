@@ -2,7 +2,7 @@ import path from 'path';
 import express from 'express';
 import adminJS from './config/admin.js';
 import AdminJSExpress from '@adminjs/express';
-import dirname from './utils/pathUtils.js'
+import { dirname } from './utils/pathUtils.js'
 const PORT = 3000
 
 const app = express()

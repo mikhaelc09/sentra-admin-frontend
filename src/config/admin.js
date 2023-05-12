@@ -3,15 +3,8 @@ import path from 'path';
 import SequelizeAdapter from '@adminjs/sequelize';
 import sequelize from '../models/index.js';
 import resources from './resource.js';
-import dirname from '../utils/pathUtils.js'
-const ComponentLoader = AdminJS.ComponentLoader
-console.log(ComponentLoader)
-const loader = new ComponentLoader()
-console.log(loader)
-const Components  = {
-    Dashboard: loader.add('Dashboard', path.join(dirname, './components/Dashboard.jsx'))
-}
-console.log(loader)
+import { loader as componentLoader, Components } from '../components/index.js';
+
 AdminJS.registerAdapter({
     Resource:SequelizeAdapter.Resource,
     Database:SequelizeAdapter.Database
@@ -31,9 +24,12 @@ const adminJsOptions = {
     adapter:SequelizeAdapter,
     assets:{
         styles:["../styles/sidebar.css"]
-    }
+    },
+    componentLoader
 }
 
 const adminJS = new AdminJS(adminJsOptions)
+
+adminJS.watch()
 
 export default adminJS
