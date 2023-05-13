@@ -14,10 +14,6 @@ module.exports = {
         type: Sequelize.STRING(10),
         references: {model: 'karyawan', key: 'nik'}
       },
-      tanggal: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
       status: {
         allowNull: false,
         type: Sequelize.SMALLINT,
