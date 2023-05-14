@@ -1,5 +1,6 @@
 import db from '../models/index.js';
 import { Components } from '../components/index.js';
+import getKaryawan from '../hooks/getKaryawan.js';
 
 const resources = [
   {
@@ -47,9 +48,14 @@ const resources = [
         icon: 'Group',
       },
       listProperties: ['id','nama','tunjangan'],
-      showProperties: ['id', 'nama', 'tunjangan'],
+      showProperties: ['id', 'nama', 'tunjangan','list_karyawan'],
       editProperties: ['nama', 'tunjangan'],
       filterProperties: ['id','nama', 'tunjangan'],
+      actions:{
+        show: {
+          after: [getKaryawan()]
+        }
+      },
       properties:{
         nama:{
           isTitle: true
@@ -62,6 +68,12 @@ const resources = [
             prefix:'Rp ',
             disableGroupSeparator: true
           }
+        },
+        list_karyawan:{
+          components:{
+            show: Components.ListKaryawan
+          },
+          position: 99
         }
       }
     },

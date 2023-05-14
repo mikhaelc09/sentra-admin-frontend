@@ -6,6 +6,7 @@ const loader = new ComponentLoader()
 const Components  = {
   DateField: loader.add('DateField', getAbsolutePath('./components/DateField.jsx')),
   Dashboard: loader.add('Dashboard', getAbsolutePath('./components/Dashboard.jsx')),
+  ListKaryawan: loader.add('ListKaryawan', getAbsolutePath('./components/ListKaryawan.jsx')),
 }
 
 export {
