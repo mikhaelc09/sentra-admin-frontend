@@ -3,7 +3,9 @@ import express from 'express';
 import adminJS from './config/admin.js';
 import AdminJSExpress from '@adminjs/express';
 import { dirname } from './utils/pathUtils.js'
-const PORT = 3000
+import * as dotenv from 'dotenv'
+dotenv.config()
+const PORT = process.env.PORT || 3000
 
 const app = express()
 app.use(express.static(path.join(dirname, "/")));
