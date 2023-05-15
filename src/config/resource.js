@@ -40,7 +40,6 @@ const resources = [
     },
   },
   {
-    //TODO: add list karyawan on show
     resource:db["Divisi"],
     options: {
       parent: {
@@ -103,6 +102,10 @@ const resources = [
             { value: 1, label: 'Overtime' },
           ]
         },
+      },
+      sort:{
+        sortBy: 'created_at',
+        direction: 'desc',
       }
     },
   },
