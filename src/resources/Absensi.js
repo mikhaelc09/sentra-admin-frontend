@@ -2,8 +2,6 @@ import db from "../models/index.js";
 import { Components } from "../components/index.js";
 
 export default {
-  //TODO: Sort by last created_at
-  //TODO: Filter default on today
   resource: db["Absensi"],
   options: {
     parent: {
