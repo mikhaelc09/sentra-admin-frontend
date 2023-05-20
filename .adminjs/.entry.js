@@ -7,3 +7,5 @@ import ListKaryawan from '../src/components/ListKaryawan'
 AdminJS.UserComponents.ListKaryawan = ListKaryawan
 import WorkHour from '../src/components/WorkHour'
 AdminJS.UserComponents.WorkHour = WorkHour
+import ConfirmIzin from '../src/components/ConfirmIzin'
+AdminJS.UserComponents.ConfirmIzin = ConfirmIzin

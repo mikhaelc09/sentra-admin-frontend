@@ -4,6 +4,12 @@ import { Components } from "../components/index.js";
 export default {
   resource: db["Izin"],
   options: {
+    actions:{
+      new:{
+        isAccesible: false,
+        isVisible: false,
+      }
+    },
     parent: {
       name: "",
       icon: "HealthCross",
@@ -16,14 +22,16 @@ export default {
       "jenis",
       "status",
     ],
-    editProperties: ["nik_pengganti", "status"],
+    editProperties: ["nik_pengganti"],
     showProperties: [
       "nik_pengaju",
       "nik_pengganti",
+      'lokasi',
       "waktu_mulai",
       "waktu_selesai",
       "jenis",
       "status",
+      'confirm_izin'
     ],
     properties: {
       status: {
@@ -39,6 +47,12 @@ export default {
           { value: 2, label: "MCU" },
         ],
       },
+      confirm_izin: {
+        components: {
+            show: Components.ConfirmIzin,
+        },
+        position: 99,
+      }
     },
   },
 };
