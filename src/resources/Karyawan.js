@@ -1,5 +1,6 @@
 import db from "../models/index.js";
 import { Components } from "../components/index.js";
+import getJadwal from "../hooks/getJadwal.js";
 
 export default {
   resource: db["Karyawan"],
@@ -33,7 +34,13 @@ export default {
       "nama_rekening",
       "no_rekening",
       "keterangan",
+      "tabel_jamkerja"
     ],
+    actions: {
+      show: {
+        after: [getJadwal()],
+      },
+    },
     properties: {
       nama: {
         isTitle: true,
@@ -47,15 +54,16 @@ export default {
       tanggal_lahir: {
         type: "date",
       },
-      created_at: {
-        components: {
-          list: Components.DateField,
+      tabel_jamkerja:{
+        components:{
+          show: Components.TableJamKerja,
         },
-      },
+        position: 99,
+      }
     },
     sort: {
-      sortBy: "updatedAt",
-      direction: "desc",
+      sortBy: "nama",
+      direction: "asc",
     },
   },
 };
