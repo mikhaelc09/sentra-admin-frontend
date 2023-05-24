@@ -8,7 +8,7 @@ export default {
       name: "",
       icon: "ListChecked",
     },
-    listProperties: ["nik", "created_at", "keterangan", "is_lembur", "status"],
+    listProperties: ["nik", "created_at", "is_lembur", "status", "keterangan"],
     filterProperties: [
       "nik",
       "is_lembur",
@@ -16,7 +16,7 @@ export default {
       "status",
       "created_at",
     ],
-    showProperties: ["nik", "is_lembur", "keterangan", "status", "created_at"],
+    showProperties: ["nik", "is_lembur", "status", "created_at", "keterangan"],
     properties: {
       status: {
         availableValues: [

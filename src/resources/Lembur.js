@@ -4,14 +4,20 @@ import { Components } from '../components/index.js';
 export default {
     resource:db["Lembur"],
     options: {
+      actions:{
+        new:{
+          isAccesible: false,
+          isVisible: false,
+        }
+      },
       parent: {
         name: "",
         icon: 'AlarmAdd',
       },
-      listProperties: ['nik', 'tanggal', 'status'],
-      listProperties: ['nik', 'tanggal', 'status'],
-      listProperties: ['nik', 'tanggal', 'status'],
-      listProperties: ['nik', 'tanggal', 'status'],
+      listProperties: ['nik', 'created_at', 'status'],
+      listProperties: ['nik', 'created_at', 'status'],
+      listProperties: ['nik', 'created_at', 'status'],
+      listProperties: ['nik', 'created_at', 'status'],
       properties:{
         status:{
           availableValues:[

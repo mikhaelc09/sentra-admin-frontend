@@ -2,7 +2,6 @@ import db from "../models/index.js";
 import { Components } from "../components/index.js";
 
 export default {
-  //TODO: Show each jam_kerja as a column
   resource: db["Jadwal"],
   options: {
     parent: {
