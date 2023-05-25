@@ -22,6 +22,7 @@ export default {
       "nama_rekening",
       "no_rekening",
       "keterangan",
+      "status",
     ],
     showProperties: [
       "nik",
@@ -34,7 +35,7 @@ export default {
       "nama_rekening",
       "no_rekening",
       "keterangan",
-      "tabel_jamkerja"
+      "tabel_jamkerja",
     ],
     actions: {
       show: {
@@ -54,12 +55,12 @@ export default {
       tanggal_lahir: {
         type: "date",
       },
-      tabel_jamkerja:{
-        components:{
+      tabel_jamkerja: {
+        components: {
           show: Components.TableJamKerja,
         },
         position: 99,
-      }
+      },
     },
     sort: {
       sortBy: "nama",
