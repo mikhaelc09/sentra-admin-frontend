@@ -41,17 +41,17 @@ export default (sequelize, DataTypes) => {
     shortdesc: {
       type: DataTypes.STRING(50)
     },
-    createdAt: {
+    created_at: {
       allowNull: false,
       type: DataTypes.DATE,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     },
-    updatedAt: {
+    updated_at: {
       allowNull: false,
       type: DataTypes.DATE,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
     },
-    deletedAt: {
+    deleted_at: {
       allowNull: true,
       type: DataTypes.DATE
     }

@@ -7,7 +7,7 @@ const getKaryawan = () =>
     async(res, req) => {
         if(req.method.toLowerCase() !== 'get'){
             return res
-        }
+        }   
         const id = parseInt(req.params.recordId)
         
         const karyawan = await db.Karyawan.findAll({

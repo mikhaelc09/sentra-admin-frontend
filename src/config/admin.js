@@ -3,6 +3,7 @@ import path from 'path';
 import SequelizeAdapter from '@adminjs/sequelize';
 import sequelize from '../models/index.js';
 import resources from './resource.js';
+import pages from '../components/pages/index.js';
 import { loader as componentLoader, Components } from '../components/index.js';
 
 AdminJS.registerAdapter({
@@ -13,6 +14,7 @@ const adminJsOptions = {
     dashboard:{
         component: Components.Dashboard
     },
+    pages,
     resources: resources,
     rootPath: '/admin',
     logoutPath: '/admin/logout',

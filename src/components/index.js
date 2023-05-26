@@ -10,6 +10,7 @@ const Components  = {
   WorkHour: loader.add('WorkHour', getAbsolutePath('./components/WorkHour.jsx')),
   ConfirmIzin: loader.add('ConfirmIzin', getAbsolutePath('./components/ConfirmIzin.jsx')),
   TableJamKerja: loader.add('TableJamKerja', getAbsolutePath('./components/TableJamKerja.jsx')),
+  SettingGaji: loader.add('SettingGaji', getAbsolutePath('./components/pages/SettingGaji.jsx')),
 }
 
 export {

@@ -11,50 +11,20 @@ export default {
     },
     listProperties: ["nik", "nama", "email", "status"],
     filterProperties: ["nik", "nama", "email", "status"],
-    editProperties: [
-      "nik",
-      "nama",
-      "id_divisi",
-      "email",
-      "no_telp",
-      "tanggal_lahir",
-      "alamat",
-      "nama_rekening",
-      "no_rekening",
-      "keterangan",
-      "status",
-    ],
-    showProperties: [
-      "nik",
-      "nama",
-      "id_divisi",
-      "email",
-      "no_telp",
-      "tanggal_lahir",
-      "alamat",
-      "nama_rekening",
-      "no_rekening",
-      "keterangan",
-      "tabel_jamkerja",
-    ],
+    editProperties: ["nik","nama","id_divisi","email","no_telp","tanggal_lahir","alamat","nama_rekening","no_rekening","keterangan","status",],
+    showProperties: ["nik","nama","id_divisi","email","no_telp","tanggal_lahir","alamat","nama_rekening","no_rekening","keterangan","tabel_jamkerja",],
     actions: {
-      show: {
-        after: [getJadwal()],
-      },
+      show: { after: [getJadwal()] },
     },
     properties: {
-      nama: {
-        isTitle: true,
-      },
+      nama: { isTitle: true },
       status: {
         availableValues: [
           { value: 0, label: "Inactive" },
           { value: 1, label: "Active" },
         ],
       },
-      tanggal_lahir: {
-        type: "date",
-      },
+      tanggal_lahir: { type: "date" },
       tabel_jamkerja: {
         components: {
           show: Components.TableJamKerja,

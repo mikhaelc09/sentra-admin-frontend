@@ -11,3 +11,5 @@ import ConfirmIzin from '../src/components/ConfirmIzin'
 AdminJS.UserComponents.ConfirmIzin = ConfirmIzin
 import TableJamKerja from '../src/components/TableJamKerja'
 AdminJS.UserComponents.TableJamKerja = TableJamKerja
+import SettingGaji from '../src/components/pages/SettingGaji'
+AdminJS.UserComponents.SettingGaji = SettingGaji

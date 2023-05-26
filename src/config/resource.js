@@ -17,7 +17,6 @@ const resources = [
   LemburResource,
   PenggajianResource,
   LokasiPentingResource,
-  ConstantResource,
 ];
 
 // console.log(resources);
