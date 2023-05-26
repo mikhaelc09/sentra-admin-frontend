@@ -1,5 +1,4 @@
 import AbsensiResource from '../resources/Absensi.js';
-import ConstantResource from '../resources/Constant.js';
 import DivisiResource from '../resources/Divisi.js';
 import IzinResource from '../resources/Izin.js';
 import JadwalResource from '../resources/Jadwal.js';
