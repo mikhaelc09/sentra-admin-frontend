@@ -35,7 +35,7 @@ export default {
         handler: async (request, response, context) => {
           const ddate = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
           if(request.method == 'get'){
-            const karyawan = await db['Karyawan'].getBelumGajian(moment(ddate).format('MM'))
+            const karyawan = await db['Karyawan'].getBelumGajian(moment(ddate).format('MM'), moment(ddate).format('YYYY'))
             return {
               karyawan
             }

@@ -39,11 +39,19 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-db["Karyawan"].getBelumGajian = async (month) => {
+db["Karyawan"].getBelumGajian = async (month, year) => {
   const dataNikWithPenggajian = await db["HPenggajian"].findAll({
-    where: Sequelize.where(
-      Sequelize.fn('MONTH', Sequelize.col('tanggal')), month
-    ),
+    where: {
+      [Sequelize.Op.and]: [
+        Sequelize.where(
+          Sequelize.fn('MONTH', Sequelize.col('tanggal')), month
+        ),
+        Sequelize.where(
+          Sequelize.fn('YEAR', Sequelize.col('tanggal')), year
+          // add check with year
+        ),
+      ]
+    },
     attributes: ['nik'],
     raw: true
   })
