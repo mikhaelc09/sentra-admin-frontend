@@ -13,6 +13,12 @@ module.exports = {
           shortdesc: "Gaji Pokok",
         },
         {
+          name: "tunjangan_perusahaan",
+          valuetype: 2,
+          intvalue: 1_000_000,
+          shortdesc: "Tunjangan Perusahaan",
+        },
+        {
           name: "makan",
           valuetype: 2,
           intvalue: 15_000,
