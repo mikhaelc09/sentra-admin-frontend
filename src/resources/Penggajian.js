@@ -4,6 +4,8 @@ import { response } from "express";
 import HPenggajian from "../models/HPenggajian.js";
 import moment from "moment";
 
+let data = null;
+
 export default {
   resource: db["HPenggajian"],
   options: {
@@ -57,15 +59,23 @@ export default {
                 msg: `Error: ${e.toString()}`
               }
             }
-            return {
-              msg: "success"
-            }
           }
-          return "what?"
         },
         showInDrawer: true,
-
-      }
+      },
+      detail:{
+        actionType:'record',
+        component:Components.Penggajian,
+        handler: (request, response, context) => {
+          const { record, currentAdmin } = context
+          if(record != null){
+            data = record
+          }
+          return {
+            record: data.toJSON(currentAdmin),
+          }
+        },
+      },
     }
   },
 };
