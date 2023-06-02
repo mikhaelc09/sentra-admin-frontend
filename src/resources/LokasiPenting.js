@@ -10,12 +10,18 @@ export default {
       icon: "Location",
     },
     listProperties: ["nama", "longitude", "latitude"],
-    showProperties: ["nama", "longitude", "latitude"],
+    showProperties: ["nama", "longitude", "latitude", 'peta'],
     filterProperties: ["nama"],
     editProperties: ["nama", "longitude", "latitude"],
     properties: {
       nama: {
         isTitle: true,
+      },
+      peta: {
+        components: {
+          show: Components.MapLokasi,
+        },
+        position: 99,
       },
     },
   },
