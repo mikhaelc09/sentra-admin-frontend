@@ -15,3 +15,7 @@ import SettingGaji from '../src/components/pages/SettingGaji'
 AdminJS.UserComponents.SettingGaji = SettingGaji
 import SiapkanGaji from '../src/components/SiapkanGaji'
 AdminJS.UserComponents.SiapkanGaji = SiapkanGaji
+import Penggajian from '../src/components/pages/Penggajian'
+AdminJS.UserComponents.Penggajian = Penggajian
+import MonitorAbsensi from '../src/components/pages/MonitorAbsensi'
+AdminJS.UserComponents.MonitorAbsensi = MonitorAbsensi

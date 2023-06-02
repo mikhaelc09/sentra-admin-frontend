@@ -19,6 +19,19 @@ const pages = {
                 BPJSKesehatan:gaji[5].intvalue,
             }
         }
+    },
+    MonitorAbsensi: {
+        label: "Monitor Absensi",
+        component: Components.MonitorAbsensi,
+        icon: 'Calendar',
+        handler: async(request, response, data) => {
+            const karyawan = await db["Karyawan"].findAll({
+                raw:true
+            })
+            return {
+                karyawan
+            }
+        }
     }
 }
 

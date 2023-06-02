@@ -13,6 +13,8 @@ const Components  = {
   SettingGaji: loader.add('SettingGaji', getAbsolutePath('./components/pages/SettingGaji.jsx')),
   // MapLokasi: loader.add('MapLokasi', getAbsolutePath('./components/MapLokasi.jsx')),
   SiapkanGaji: loader.add('SiapkanGaji', getAbsolutePath('./components/SiapkanGaji.jsx')),
+  Penggajian: loader.add('Penggajian', getAbsolutePath('./components/pages/Penggajian.jsx')),
+  MonitorAbsensi: loader.add('MonitorAbsensi', getAbsolutePath('./components/pages/MonitorAbsensi.jsx')),
 }
 
 export {
