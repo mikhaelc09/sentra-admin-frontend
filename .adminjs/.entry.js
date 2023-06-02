@@ -13,3 +13,5 @@ import TableJamKerja from '../src/components/TableJamKerja'
 AdminJS.UserComponents.TableJamKerja = TableJamKerja
 import SettingGaji from '../src/components/pages/SettingGaji'
 AdminJS.UserComponents.SettingGaji = SettingGaji
+import SiapkanGaji from '../src/components/SiapkanGaji'
+AdminJS.UserComponents.SiapkanGaji = SiapkanGaji

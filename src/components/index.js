@@ -11,6 +11,8 @@ const Components  = {
   ConfirmIzin: loader.add('ConfirmIzin', getAbsolutePath('./components/ConfirmIzin.jsx')),
   TableJamKerja: loader.add('TableJamKerja', getAbsolutePath('./components/TableJamKerja.jsx')),
   SettingGaji: loader.add('SettingGaji', getAbsolutePath('./components/pages/SettingGaji.jsx')),
+  // MapLokasi: loader.add('MapLokasi', getAbsolutePath('./components/MapLokasi.jsx')),
+  SiapkanGaji: loader.add('SiapkanGaji', getAbsolutePath('./components/SiapkanGaji.jsx')),
 }
 
 export {

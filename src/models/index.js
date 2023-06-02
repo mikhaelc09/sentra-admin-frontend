@@ -35,10 +35,29 @@ db["LokasiPenting"] = LokasiPenting(sequelize, Sequelize);
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
-    // console.log(modelName, "loaded")
     db[modelName].associate(db);
   }
 });
+
+db["Karyawan"].getBelumGajian = async (month) => {
+  const dataNikWithPenggajian = await db["HPenggajian"].findAll({
+    where: Sequelize.where(
+      Sequelize.fn('MONTH', Sequelize.col('tanggal')), month
+    ),
+    attributes: ['nik'],
+    raw: true
+  })
+  const nikWithPenggajian = dataNikWithPenggajian.map((item) => item.nik)
+  const availableKaryawan = await db["Karyawan"].findAll({
+    where:{
+      nik:{
+        [Sequelize.Op.notIn]: nikWithPenggajian
+      }
+    },
+    raw: true
+  })
+  return availableKaryawan
+}
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
