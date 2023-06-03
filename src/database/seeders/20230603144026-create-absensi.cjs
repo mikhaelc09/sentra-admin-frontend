@@ -20,10 +20,12 @@ const position = {
   latitude: -7.32027,
 }
 
+let firstDay = new Date(new Date().setDate(new Date().getDate() - 9));
+
 for (let i = 0; i < 10; i++) {
-  const date = new Date(2023,5,i + 1)
-  const round = Math.floor(Math.random() * 4)
+  firstDay = new Date(firstDay.setDate(firstDay.getDate() + 1));
   for (const n of nik) {
+    const round = Math.floor(Math.random() * 4) 
     for (let j = 0; j < round; j++) {
       data.push({
         nik: n,
@@ -32,7 +34,7 @@ for (let i = 0; i < 10; i++) {
         is_lembur: Math.floor(Math.random() * 2),
         keterangan: 'Hadir',
         status: Math.floor(Math.random() * 2),
-        created_at: date,
+        created_at: firstDay,
       })
     }
   }
