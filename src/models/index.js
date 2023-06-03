@@ -21,6 +21,7 @@ import Jadwal from './Jadwal.js';
 import Karyawan from './Karyawan.js';
 import Lembur from './Lembur.js';
 import LokasiPenting from './LokasiPenting.js';
+import moment from 'moment'
 
 db["Absensi"] = Absensi(sequelize, Sequelize);
 db["Constant"] = Constant(sequelize, Sequelize);
@@ -48,7 +49,6 @@ db["Karyawan"].getBelumGajian = async (month, year) => {
         ),
         Sequelize.where(
           Sequelize.fn('YEAR', Sequelize.col('tanggal')), year
-          // add check with year
         ),
       ]
     },
@@ -65,6 +65,46 @@ db["Karyawan"].getBelumGajian = async (month, year) => {
     raw: true
   })
   return availableKaryawan
+}
+
+db["Karyawan"].sudahAbsen = async () => {
+  const dataNikWithAbsensi = await db["Absensi"].findAll({
+    where: {
+      [Sequelize.Op.and]: [
+        Sequelize.where(
+          Sequelize.fn('DATE', Sequelize.col('created_at'), moment().format('YYYY-MM-DD')), 
+        ),
+      ]
+    },
+    attributes: ['nik'],
+    raw: true
+  })
+  const nikWithAbsensi = dataNikWithAbsensi.map((item) => item.nik)
+  const availableKaryawan = await db["Karyawan"].findAll({
+    where:{
+      nik:{
+        [Sequelize.Op.notIn]: nikWithAbsensi
+      }
+    },
+    raw: true
+  })
+  return availableKaryawan
+}
+
+db["Karyawan"].getMasuk = async (month, year) => {
+  const masuk = await db["Absensi"].findAndCountAll({
+    where: {
+      [Sequelize.Op.and]: [
+        Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('created_at')), month),
+        Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), year),
+        Sequelize.where(Sequelize.col('status'),1)
+      ]
+    },
+    attributes: [ Sequelize.fn('DAY', Sequelize.col('created_at')) ],
+    distinct: true,
+    raw: true
+  })
+  return masuk.count;
 }
 
 db.sequelize = sequelize;
