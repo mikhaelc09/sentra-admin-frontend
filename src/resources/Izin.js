@@ -14,6 +14,14 @@ export default {
       name: "",
       icon: "HealthCross",
     },
+    filterProperties: [
+      "nik_pengaju",
+      "nik_pengganti",
+      "waktu_mulai",
+      "waktu_selesai",
+      "jenis",
+      "status",
+    ],
     listProperties: [
       "nik_pengaju",
       "nik_pengganti",

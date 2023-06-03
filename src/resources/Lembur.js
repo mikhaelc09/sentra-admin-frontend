@@ -15,9 +15,9 @@ export default {
         icon: 'AlarmAdd',
       },
       listProperties: ['nik', 'created_at', 'status'],
-      listProperties: ['nik', 'created_at', 'status'],
-      listProperties: ['nik', 'created_at', 'status'],
-      listProperties: ['nik', 'created_at', 'status'],
+      editProperties: ['nik', 'created_at', 'status'],
+      showProperties: ['nik', 'created_at', 'status'],
+      filterProperties: ['nik', 'created_at', 'status'],
       properties:{
         status:{
           availableValues:[
