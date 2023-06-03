@@ -12,12 +12,17 @@ const MonitorAbsensi = (props) => {
             pageName: "MonitorAbsensi",
             method: "GET",
         }).then((response) => {
-            setKaryawan(response.data.karyawan)
+            setKaryawan(JSON.parse(response.data.karyawan))
         })
     }, [])
 
+    useEffect(() => {
+        console.log(karyawan);
+    }, [karyawan])
+
     return <Box variant="white" p={16}>
         <Header>Monitor Absensi</Header>
+        <Text>Sisa Hari Kerja Bulan ini: {lastDate-(new Date()).getDate()}</Text>
         <Box margin={40}></Box>
         <Table>
             <TableHead>
@@ -34,7 +39,7 @@ const MonitorAbsensi = (props) => {
                         <TableCell>{index+1}</TableCell>
                         <TableCell><H6>{karyawan.nama}</H6></TableCell>
                         <TableCell color={karyawan.masukToday?'green':'red'}><H6 textAlign={'center'}>{karyawan.masukToday?'Sudah Absen':'Belum Absen'}</H6></TableCell>
-                        <TableCell><H6 textAlign={"center"}>{karyawan.masuk}/{lastDate}</H6></TableCell>
+                        <TableCell><H6 textAlign={"center"}>{karyawan.masuk ? karyawan.masuk.length : 0}/{lastDate}</H6></TableCell>
                     </TableRow>
                 })}
             </TableBody>

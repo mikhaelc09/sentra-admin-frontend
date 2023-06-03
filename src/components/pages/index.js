@@ -1,6 +1,7 @@
 import { Components } from '../index.js';
 import db from '../../models/index.js';
 import moment from 'moment';
+import { toFormData } from 'axios';
 
 const Sequelize = db.Sequelize;
 const pages = {
@@ -44,21 +45,17 @@ const pages = {
                 }
             })
             for (const a of absensi) {
-                if(karyawan.find((item) => item.nik == a.nik).masuk == null){
-                    karyawan.find((item) => item.nik == a.nik).masuk = 0;
-                }
-                if(karyawan.find((item) => item.nik == a.nik).masukToday == null){
+                if(karyawan.find((item) => item.nik == a.nik).masuk == null)
+                    karyawan.find((item) => item.nik == a.nik).masuk = [];
+                if(karyawan.find((item) => item.nik == a.nik).masukToday == null)
                     karyawan.find((item) => item.nik == a.nik).masukToday = false
-                }
-                karyawan.find((item) => item.nik == a.nik).masuk += 1
-                if(moment(a.created_at).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")){
+                if(karyawan.find((item) => item.nik == a.nik).masuk.indexOf(moment(a.created_at).format("YYYY-MM-DD")) == -1)
+                    karyawan.find((item) => item.nik == a.nik).masuk.push(moment(a.created_at).format("YYYY-MM-DD"))
+                if(moment(a.created_at).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD"))
                     karyawan.find((item) => item.nik == a.nik).masukToday = true
-                }
             }
             console.log(karyawan)
-            return {
-                karyawan
-            }
+            return { karyawan: JSON.stringify(karyawan)}
         }
     }
 }
