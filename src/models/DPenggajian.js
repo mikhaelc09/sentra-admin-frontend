@@ -40,6 +40,14 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
+    nominal: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    subtotal: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
     created_at: {
       allowNull: false,
       type: DataTypes.DATE,

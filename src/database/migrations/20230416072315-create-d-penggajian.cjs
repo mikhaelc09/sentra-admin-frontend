@@ -26,6 +26,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      nominal: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      subtotal: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
