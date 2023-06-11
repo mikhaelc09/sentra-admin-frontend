@@ -7,7 +7,7 @@ import {
   Box,
   Button,
 } from "@adminjs/design-system";
-import { ActionHeader, ApiClient } from "adminjs";
+import { ActionHeader, ApiClient, useNotice } from "adminjs";
 import { toFormData } from "axios";
 import { useNavigate } from 'react-router-dom'
 
@@ -17,6 +17,7 @@ const SiapkanGaji = (props) => {
   const [checkList, setCheckList] = useState();
   const [all, setAll] = useState(false);
   const navigate = useNavigate()
+  const notice = useNotice();
 
   useEffect(() => {
     api
@@ -37,7 +38,6 @@ const SiapkanGaji = (props) => {
     const handleSubmit = () => {
       let karyawan = checkList.filter((karyawan) => karyawan.checked).map((karyawan) => karyawan.nik)
       karyawan = JSON.stringify(karyawan)
-      console.log(karyawan)
       api.resourceAction({
         resourceId: "Penggajian",
         actionName: "SiapkanGajiBulanan",
@@ -46,9 +46,10 @@ const SiapkanGaji = (props) => {
           karyawan
         })
       }).then((response) => {
-          if(response.data.msg==="success"){
-            navigate('/admin/resources/Penggajian')
-          }
+        if(response.data.msg==="Success"){
+          notice({message:`Berhasil menyiapkan gaji untuk ${response.data.counter} karyawan`})
+          navigate('/admin/resources/Penggajian')
+        }
       })
     }
 
