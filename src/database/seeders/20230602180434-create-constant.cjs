@@ -37,6 +37,12 @@ module.exports = {
           shortdesc: "Fee Lembur",
         },
         {
+          name: "fee_mcu",
+          valuetype: 2,
+          intvalue: 25_000,
+          shortdesc: "Fee MCU",
+        },
+        {
           name: "bpjs_kesehatan",
           valuetype: 2,
           intvalue: 100_000,
