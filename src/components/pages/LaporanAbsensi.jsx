@@ -4,7 +4,7 @@ import { Box, H4, Label, Button } from "@adminjs/design-system";
 import { toFormData } from "axios";
 
 const LaporanAbsensi = (props) => {
-  const [month, setMonth] = useState('');
+  const [month, setMonth] = useState('2023-06');
   const api = new ApiClient();
 
   const generateAbsensi = () => {
