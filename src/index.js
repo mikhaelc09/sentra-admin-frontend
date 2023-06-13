@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.static(path.join(dirname, "/")));
+app.use('./pdf', express.static(path.join(dirname, "/pdf")))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const adminJSRouter = AdminJSExpress.buildRouter(adminJS);

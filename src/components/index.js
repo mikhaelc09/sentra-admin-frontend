@@ -15,6 +15,7 @@ const Components  = {
   SiapkanGaji: loader.add('SiapkanGaji', getAbsolutePath('./components/SiapkanGaji.jsx')),
   Penggajian: loader.add('Penggajian', getAbsolutePath('./components/pages/Penggajian.jsx')),
   MonitorAbsensi: loader.add('MonitorAbsensi', getAbsolutePath('./components/pages/MonitorAbsensi.jsx')),
+  LaporanAbsensi: loader.add('LaporanAbsensi', getAbsolutePath('./components/pages/LaporanAbsensi.jsx')),
 }
 
 export {

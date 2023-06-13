@@ -19,3 +19,5 @@ import Penggajian from '../src/components/pages/Penggajian'
 AdminJS.UserComponents.Penggajian = Penggajian
 import MonitorAbsensi from '../src/components/pages/MonitorAbsensi'
 AdminJS.UserComponents.MonitorAbsensi = MonitorAbsensi
+import LaporanAbsensi from '../src/components/pages/LaporanAbsensi'
+AdminJS.UserComponents.LaporanAbsensi = LaporanAbsensi
