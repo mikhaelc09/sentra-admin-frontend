@@ -15,7 +15,7 @@ const LaporanAbsensi = (props) => {
         pageName: "LaporanAbsensi",
         method: "POST",
         data: toFormData({
-          month: month,
+          month: month1,
           type: "absensi",
         }),
       })

@@ -40,7 +40,7 @@ const generateabsensi = ({month, karyawan})  => {
             {header: 'Jumlah MCU', dataKey: 'mcu'},
         ]
     })
-    const filename='test.pdf'
+    const filename=`${month}.pdf`
 
     doc.save(getAbsolutePath(`./pdf/${filename}`))
 
