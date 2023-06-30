@@ -16,7 +16,7 @@ module.exports = {
       },
       tanggal: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       total: {
         allowNull: false,
