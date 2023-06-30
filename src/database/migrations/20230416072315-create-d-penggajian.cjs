@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.STRING(30)
       },
       keterangan: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.TEXT
       },
       jumlah: {
