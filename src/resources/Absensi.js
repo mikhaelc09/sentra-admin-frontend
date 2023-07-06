@@ -4,6 +4,16 @@ import { Components } from "../components/index.js";
 export default {
   resource: db["Absensi"],
   options: {
+    actions:{
+      new:{
+        isAccesible: false,
+        isVisible: false,
+      },
+      delete:{
+        isAccesible: false,
+        isVisible: false,
+      },
+    },
     parent: {
       name: "",
       icon: "ListChecked",
