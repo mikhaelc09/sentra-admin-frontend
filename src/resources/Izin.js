@@ -8,7 +8,11 @@ export default {
       new:{
         isAccesible: false,
         isVisible: false,
-      }
+      },
+      delete:{
+        isAccesible: false,
+        isVisible: false,
+      },
     },
     parent: {
       name: "",
