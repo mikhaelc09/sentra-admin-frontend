@@ -17,6 +17,7 @@ export default {
       "created_at",
     ],
     showProperties: ["nik", "is_lembur", "status", "created_at", "keterangan"],
+    editProperties: ["status"],
     properties: {
       status: {
         availableValues: [
