@@ -33,7 +33,7 @@ export default (sequelize, DataTypes) => {
     },
     tanggal: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATEONLY
     },
     total: {
       allowNull: false,
