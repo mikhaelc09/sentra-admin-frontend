@@ -1,4 +1,7 @@
 'use strict';
+
+import { DataTypes } from 'sequelize';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -43,6 +46,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.SMALLINT,
         comment: '1: Cuti, 2: MCU'
+      },
+      signature:{
+        allowNull: false,
+        type: DataTypes.TEXT
       },
       created_at: {
         allowNull: false,

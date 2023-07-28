@@ -57,6 +57,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.SMALLINT,
       comment: '0: Cuti, 1: MCU'
     },
+    signature:{
+      allowNull: false,
+      type: DataTypes.TEXT
+    },
     created_at: {
       allowNull: false,
       type: DataTypes.DATE,
