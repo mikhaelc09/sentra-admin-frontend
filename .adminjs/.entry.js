@@ -9,6 +9,8 @@ import WorkHour from '../src/components/WorkHour'
 AdminJS.UserComponents.WorkHour = WorkHour
 import ConfirmIzin from '../src/components/ConfirmIzin'
 AdminJS.UserComponents.ConfirmIzin = ConfirmIzin
+import ConfirmLembur from '../src/components/ConfirmLembur'
+AdminJS.UserComponents.ConfirmLembur = ConfirmLembur
 import TableJamKerja from '../src/components/TableJamKerja'
 AdminJS.UserComponents.TableJamKerja = TableJamKerja
 import SettingGaji from '../src/components/pages/SettingGaji'

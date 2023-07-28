@@ -16,7 +16,7 @@ export default {
       },
       listProperties: ['nik', 'created_at', 'status'],
       editProperties: ['nik', 'created_at', 'status'],
-      showProperties: ['nik', 'created_at', 'status'],
+      showProperties: ['nik', 'created_at', 'status','confirm_lembur'],
       filterProperties: ['nik', 'created_at', 'status'],
       properties:{
         status:{
@@ -25,6 +25,12 @@ export default {
             { value: 1, label: 'Pending' },
             { value: 2, label: 'Approved' },
           ]
+        },
+        confirm_lembur: {
+          components: {
+              show: Components.ConfirmLembur,
+          },
+          position: 99,
         }
       }
     },

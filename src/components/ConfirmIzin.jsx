@@ -8,16 +8,16 @@ const ConfirmIzin = (props) => {
     const [isPending, setIsPending] = useState(props.record.params.status == 1);
     const notice = useNotice()
     const handleTolak = async () => {
-        await axios.post(`/admin/api/resources/izin/records/${props.record.params.id}/edit`,{
+        await axios.post(`/admin/api/resources/izin/records/${props.record.params.id}/edit`,axios.toFormData({
             status:0
-        })
+        }))
         notice({message: 'Izin ditolak'})
         setIsPending(false)
     }
     const handleSetuju = async () => {
-        await axios.post(`/admin/api/resources/izin/records/${props.record.params.id}/edit`,{
+        await axios.post(`/admin/api/resources/izin/records/${props.record.params.id}/edit`,axios.toFormData({
             status:2
-        })
+        }))
         notice({message: 'Izin disetujui'})
         setIsPending(false)
     }

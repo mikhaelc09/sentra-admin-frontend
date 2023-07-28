@@ -9,6 +9,7 @@ const Components  = {
   ListKaryawan: loader.add('ListKaryawan', getAbsolutePath('./components/ListKaryawan.jsx')),
   WorkHour: loader.add('WorkHour', getAbsolutePath('./components/WorkHour.jsx')),
   ConfirmIzin: loader.add('ConfirmIzin', getAbsolutePath('./components/ConfirmIzin.jsx')),
+  ConfirmLembur: loader.add('ConfirmLembur', getAbsolutePath('./components/ConfirmLembur.jsx')),
   TableJamKerja: loader.add('TableJamKerja', getAbsolutePath('./components/TableJamKerja.jsx')),
   SettingGaji: loader.add('SettingGaji', getAbsolutePath('./components/pages/SettingGaji.jsx')),
   // MapLokasi: loader.add('MapLokasi', getAbsolutePath('./components/MapLokasi.jsx')),
