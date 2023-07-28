@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import { Box, H6, H5, H2 } from "@adminjs/design-system";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, Legend } from "recharts";
 
@@ -58,12 +59,12 @@ const Dashboard = (props) => {
       </Box>
       <Box flex flexDirection={"row"} my={12} flexGrow={1}>
         <Box variant="white" mx={12} flexGrow={1}>
-          <H6>Jumlah Karyawan</H6>
-          <H5>31 orang</H5>
+          <H6>Tanggal</H6>
+          <H5>{moment().format('dddd, D MMMM YYYY')}</H5>
         </Box>
         <Box variant="white" mx={12} flexGrow={1}>
-          <H6>Hari kerja Bulan ini</H6>
-          <H5>15/31 hari</H5>
+          <H6>Jumlah Karyawan</H6>
+          <H5>31 orang</H5>
         </Box>
         <Box variant="white" mx={12} flexGrow={1}>
           <H6>Jumlah Sudah Absen</H6>

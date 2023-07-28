@@ -43,9 +43,15 @@ export default {
       "waktu_selesai",
       "jenis",
       "status",
+      "signature",
       'confirm_izin'
     ],
     properties: {
+      signature:{
+        components:{
+          show: Components.Signature,
+        }
+      },
       status: {
         availableValues: [
           { value: 0, label: "Rejected" },

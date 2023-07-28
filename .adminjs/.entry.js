@@ -21,3 +21,5 @@ import MonitorAbsensi from '../src/components/pages/MonitorAbsensi'
 AdminJS.UserComponents.MonitorAbsensi = MonitorAbsensi
 import LaporanAbsensi from '../src/components/pages/LaporanAbsensi'
 AdminJS.UserComponents.LaporanAbsensi = LaporanAbsensi
+import Signature from '../src/components/Signature'
+AdminJS.UserComponents.Signature = Signature
