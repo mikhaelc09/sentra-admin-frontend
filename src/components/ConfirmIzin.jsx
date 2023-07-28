@@ -4,7 +4,7 @@ import { Box, Button } from '@adminjs/design-system'
 import { useNotice } from 'adminjs'
 import axios from 'axios'
 
-const Dashboard = (props) => {
+const ConfirmIzin = (props) => {
     const [isPending, setIsPending] = useState(props.record.params.status == 1);
     const notice = useNotice()
     const handleTolak = async () => {
@@ -33,4 +33,4 @@ const Dashboard = (props) => {
     )
 }
 
-export default Dashboard
+export default ConfirmIzin
