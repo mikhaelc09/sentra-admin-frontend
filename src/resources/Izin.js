@@ -34,7 +34,7 @@ export default {
       "jenis",
       "status",
     ],
-    editProperties: ["nik_pengganti"],
+    editProperties: ["nik_pengganti", "status"],
     showProperties: [
       "nik_pengaju",
       "nik_pengganti",

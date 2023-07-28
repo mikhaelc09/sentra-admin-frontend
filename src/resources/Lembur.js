@@ -8,6 +8,10 @@ export default {
         new:{
           isAccesible: false,
           isVisible: false,
+        },
+        delete:{
+          isAccesible: false,
+          isVisible: false,
         }
       },
       parent: {
@@ -15,7 +19,7 @@ export default {
         icon: 'AlarmAdd',
       },
       listProperties: ['nik', 'created_at', 'status'],
-      editProperties: ['nik', 'created_at', 'status'],
+      editProperties: ['nik', 'status'],
       showProperties: ['nik', 'created_at', 'status','confirm_lembur'],
       filterProperties: ['nik', 'created_at', 'status'],
       properties:{
