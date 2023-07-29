@@ -21,14 +21,14 @@ const adminJsOptions = {
     logoutPath: '/admin/logout',
     branding: {
         companyName: 'Sentra Medika Surabaya',
-        logo: './assets/logo_white.png',
+        logo: '/assets/logo_white.png',
         withMadeWithLove: false,
-        favicon: './assets/logo_white.png',
+        favicon: '/assets/logo_white.png',
     },
     database:sequelize,
     adapter:SequelizeAdapter,
     assets:{
-        styles:['./styles/sidebar.css'],
+        styles:['/styles/sidebar.css'],
     },
     componentLoader
 }
