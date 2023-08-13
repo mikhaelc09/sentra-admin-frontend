@@ -26,66 +26,22 @@ app.put("/api/setting", async (req, res) => {
     feeLembur,
     BPJSKesehatan,
   } = req.body;
-  await db["Constant"].update(
-    {
-      intvalue: parseInt(gajiPokok),
-    },
-    {
-      where: {
-        id: 1,
-      },
-    }
-  );
-  await db["Constant"].update(
-    {
-      intvalue: parseInt(tunjanganPerusahaan),
-    },
-    {
-      where: {
-        id: 2,
-      },
-    }
-  );
-  await db["Constant"].update(
-    {
-      intvalue: parseInt(uangMakan),
-    },
-    {
-      where: {
-        id: 3,
-      },
-    }
-  );
-  await db["Constant"].update(
-    {
-      intvalue: parseInt(uangTransportasi),
-    },
-    {
-      where: {
-        id: 4,
-      },
-    }
-  );
-  await db["Constant"].update(
-    {
-      intvalue: parseInt(feeLembur),
-    },
-    {
-      where: {
-        id: 5,
-      },
-    }
-  );
-  await db["Constant"].update(
-    {
-      intvalue: parseInt(BPJSKesehatan),
-    },
-    {
-      where: {
-        id: 6,
-      },
-    }
-  );
+  const constUpdates = [
+    gajiPokok,
+    tunjanganPerusahaan,
+    uangMakan,
+    uangTransportasi,
+    feeLembur,
+    BPJSKesehatan,
+  ]
+  constUpdates.forEach((value, index) => {
+    (async () => {
+      await db["Constant"].update(
+        { intvalue: parseInt(value) },
+        { where: { id: index + 1 } }
+      )
+    })()
+  })
   return res.status(201).send({
     message: "Setting berhasil diubah",
   });
