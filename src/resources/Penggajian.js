@@ -155,6 +155,18 @@ export default {
                   }
                 ])
                 // console.log(header)
+                const total = await db["DPenggajian"].sum('subtotal',{
+                  where:{
+                    id_header: header_id
+                  }
+                })
+                await db["HPenggajian"].update({
+                  total: total
+                },{
+                  where:{
+                    id: header_id
+                  }
+                })
               }
               return {
                 msg: "Success",
@@ -251,9 +263,14 @@ export default {
             },
             raw: true
           })
+
+          const karyawan = await db["Karyawan"].findByPk(data.params.nik,{
+            raw: true
+          })
           
           data.populated.detail = detail
           data.populated.header_id = data.params.id
+          data.populated.karyawan = karyawan
           // console.log(data)
           return {
             record: data.toJSON(currentAdmin),
