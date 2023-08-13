@@ -44,6 +44,8 @@ const Penggajian = (props) => {
 
   const [totalGaji, setTotalGaji] = useState(0)
   const [header_id, setHeader_id] = useState(-1)
+  const [karyawan, setKaryawan] = useState({})
+  const [bulanGaji, setBulanGaji] = useState(new Date())
 
   useEffect(() => {
     api
@@ -53,6 +55,8 @@ const Penggajian = (props) => {
       })
       .then((response) => {
         setHeader_id(response.data.record.populated.header_id);
+        setKaryawan(response.data.record.populated.karyawan);
+        setBulanGaji(new Date(response.data.record.populated.detail[0].created_at))
         const data = response.data.record.populated.detail;
         setGajiPokok(val(data, "Gaji Pokok"))
         setTunjanganJabatan(val(data, "Tunjangan Jabatan"))
@@ -166,7 +170,7 @@ const Penggajian = (props) => {
 
   return (
     <Box variant="white">
-      <H4 fontWeight="bold">Gaji {header_id}</H4>
+      <H4 fontWeight="bold">Gaji {karyawan.nama} Bulan {bulanGaji.getMonth()} Tahun {bulanGaji.getFullYear()}</H4>
 
       <ValueGroup label="Gaji Pokok" value={rp(gajiPokok)}/>
       <ValueGroup label="Tunjangan Jabatan" value={rp(tunjanganJabatan)}/>
