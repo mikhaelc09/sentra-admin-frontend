@@ -30,6 +30,10 @@ export default {
       }
     },
     actions: {
+      new:{
+        isAccessible: false,
+        isVisible: false,
+      },
       SiapkanGajiBulanan:{  
         actionType:'resource',
         icon:'Money',
@@ -171,7 +175,6 @@ export default {
         component:Components.Penggajian,
         handler: async (request, response, context) => {
           if(request.method == "post"){
-            console.log(request.payload)
             const payload = request.payload
             await db["DPenggajian"].update({
               jumlah: payload["uangMakan[jumlah]"],
