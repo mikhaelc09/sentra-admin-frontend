@@ -2,6 +2,7 @@ import path from "path";
 import express from "express";
 import adminJS from "./config/admin.js";
 import AdminJSExpress from "@adminjs/express";
+import bcrypt from 'bcrypt';
 import { dirname } from "./utils/pathUtils.js";
 import * as dotenv from "dotenv";
 import db from "./models/index.js";
@@ -11,11 +12,24 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.static(path.join(dirname, "/")));
 app.use('./pdf', express.static(path.join(dirname, "/pdf")))
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const adminJSRouter = AdminJSExpress.buildRouter(adminJS);
+
+// const adminJSRouter = AdminJSExpress.buildRouter(adminJS);
+const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
+  authenticate: async (email, password) => {
+    const user = await db["Karyawan"].findOne({ where: { email } });
+    if (user) {
+      const matched = await bcrypt.compare(password, user.password);
+      if (matched) {
+        return user;
+      }
+    }
+    return false;
+  },
+  cookiePassword: process.env.JWT_SECRET,
+});
+
 app.get("/admin/logout", (req, res) => {
-  res.redirect("/login");
+  res.redirect("/admin/login");
 });
 app.put("/api/setting", async (req, res) => {
   const {
@@ -47,6 +61,8 @@ app.put("/api/setting", async (req, res) => {
   });
 });
 app.use(adminJS.options.rootPath, adminJSRouter);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.listen(PORT, () => {
   console.log(
