@@ -1,6 +1,5 @@
 import  { getAbsolutePath } from '../utils/pathUtils.js'
-import pkg from 'adminjs';
-const { ComponentLoader } = pkg
+import { ComponentLoader } from 'adminjs';
 
 const loader = new ComponentLoader()
 const Components  = {

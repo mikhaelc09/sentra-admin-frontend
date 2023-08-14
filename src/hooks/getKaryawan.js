@@ -1,7 +1,5 @@
-import { response } from "express"
 import db from '../models/index.js';
-import pkg from 'adminjs'
-const { flat } = pkg
+import { flat } from 'adminjs'
 
 const getKaryawan = () => 
     async(res, req) => {

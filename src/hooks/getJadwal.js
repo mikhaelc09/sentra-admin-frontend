@@ -1,6 +1,5 @@
 import db from '../models/index.js';
-import pkg from 'adminjs'
-const { flat } = pkg
+import { flat } from 'adminjs'
 
 const getJadwal = () => 
     async(res, req) => {
