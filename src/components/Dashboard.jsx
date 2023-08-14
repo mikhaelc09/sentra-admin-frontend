@@ -1,7 +1,9 @@
 import React from "react";
 import moment from "moment";
-import { Box, H6, H5, H2 } from "@adminjs/design-system";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, Legend } from "recharts";
+import { Box, H6, H5, H2, Badge } from "@adminjs/design-system";
+import StatusKaryawan from "./charts/StatusKaryawan";
+import IzinKaryawan from "./charts/IzinKaryawan";
+import PresensiKaryawan from "./charts/PresensiKaryawan";
 
 const Dashboard = (props) => {
   const dataKaryawan = [
@@ -9,33 +11,6 @@ const Dashboard = (props) => {
     { name: "Izin", value: 4 },
     { name: "Belum Absen", value: 2 },
   ];
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
-  const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
 
   const dataIzin = [
     { name: "MCU", value: 3 },
@@ -52,84 +27,126 @@ const Dashboard = (props) => {
     { jumlah_hadir: 25, name: "15 Jun" },
   ];
 
+  const dataPengajuanIzin = [
+    {
+      nik: "2021212",
+      mulai: "2023-07-30",
+      selesai: "2023-07-31",
+      jenis: 1,
+    },
+    {
+      nik: "2213112",
+      mulai: "2023-08-05",
+      selesai: "2023-08-07",
+      jenis: 2,
+    },
+    {
+      nik: "2028432",
+      mulai: "2023-08-10",
+      selesai: "2023-08-12",
+      jenis: 1,
+    },
+    {
+      nik: "2067353",
+      mulai: "2023-08-10",
+      selesai: "2023-08-15",
+      jenis: 2,
+    },
+  ];
+
+  const dataPengajuanLembur = [
+    {
+      nik: "46144324",
+      waktu: "2023-07-12",
+    },
+    {
+      nik: "68456785",
+      waktu: "2023-08-10",
+    },
+    {
+      nik: "93345645",
+      waktu: "2023-08-13",
+    },
+  ];
+
+  const StatBox = (props) => {
+    const { flexGrow } = props;
+    return (
+      <Box
+        variant="white"
+        flexGrow={flexGrow ?? 1}
+        mx={12}
+        borderRadius={12}
+        boxShadow={"2px 2px 10px DarkGray"}
+      >
+        {props.children}
+      </Box>
+    );
+  };
+
   return (
     <Box m={12} flex={true} flexDirection={"column"}>
       <Box m={12} mb={0}>
         <H2>Welcome, Admin</H2>
       </Box>
       <Box flex flexDirection={"row"} my={12} flexGrow={1}>
-        <Box variant="white" mx={12} flexGrow={1}>
+        <StatBox>
           <H6>Tanggal</H6>
-          <H5>{moment().format('dddd, D MMMM YYYY')}</H5>
-        </Box>
-        <Box variant="white" mx={12} flexGrow={1}>
+          <H5>{moment().format("dddd, D MMMM YYYY")}</H5>
+        </StatBox>
+        <StatBox>
           <H6>Jumlah Karyawan</H6>
           <H5>31 orang</H5>
-        </Box>
-        <Box variant="white" mx={12} flexGrow={1}>
+        </StatBox>
+        <StatBox>
           <H6>Jumlah Sudah Absen</H6>
           <H5>25 orang</H5>
-        </Box>
-        <Box variant="white" mx={12} flexGrow={1}>
+        </StatBox>
+        <StatBox>
           <H6>Jumlah Izin</H6>
           <H5>4 orang</H5>
-        </Box>
+        </StatBox>
       </Box>
       <Box flex flexDirection={"row"} my={12} flexGrow={1}>
-        <Box variant="white" flexGrow={1} mx={12}>
+        <StatBox>
           <H5>Status Karyawan</H5>
-          <PieChart width={200} height={200} margin={30}>
-            <Pie
-              data={dataKaryawan}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={renderCustomizedLabel}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {dataKaryawan.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Legend />
-          </PieChart>
-        </Box>
-        <Box variant="white" flexGrow={1} mx={12}>
+          <StatusKaryawan dataKaryawan={dataKaryawan} />
+        </StatBox>
+        <StatBox>
           <H5>Izin Karyawan</H5>
-          <PieChart width={200} height={200} margin={30}>
-            <Pie
-              data={dataIzin}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={renderCustomizedLabel}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {dataIzin.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Legend />
-          </PieChart>
-        </Box>
-        <Box variant="white" flexGrow={2} mx={12}>
+          <IzinKaryawan dataIzin={dataIzin} />
+        </StatBox>
+        <StatBox flexGrow={2}>
           <H5>Presensi Karyawan</H5>
-          <BarChart width={400} height={200} data={dataPresensi}>
-            <XAxis dataKey="name" />
-            <Legend name="Jumlah Hadir" />
-            <Bar dataKey="jumlah_hadir" fill="#8884d8" />
-          </BarChart>
-        </Box>
+          <PresensiKaryawan dataPresensi={dataPresensi} />
+        </StatBox>
+      </Box>
+      <Box flex flexDirection={"row"} my={12} flexGrow={1}>
+        <StatBox>
+          <H5>Daftar Pengajuan Izin</H5>
+          {dataPengajuanIzin.map((i) => {
+            return <Box flex flexDirection='row'  my={4} alignItems='center' justifyContent={'space-between'} variant='grey'>
+              <Box flex flexDirection='column' mr={4}>
+                <H6>{ i.nik }</H6>
+                <text>{ i.mulai } - { i.selesai }</text>
+              </Box>
+              <Box>
+                <Badge variant={ i.jenis == 1 ? 'danger' : 'success'} >{ i.jenis == 1 ? 'Izin' : 'MCU' }</Badge>
+              </Box>
+            </Box>
+          })}
+        </StatBox>
+        <StatBox>
+          <H5>Daftar Pengajuan Lembur</H5>
+          {dataPengajuanLembur.map((i) => {
+            return <Box flex flexDirection='row'  my={4} alignItems='center' justifyContent={'space-between'} variant='grey'>
+              <Box flex flexDirection='column' mr={4}>
+                <H6>{ i.nik }</H6>
+                <text>{ i.waktu }</text>
+              </Box>
+            </Box>
+          })}
+        </StatBox>
       </Box>
     </Box>
   );
