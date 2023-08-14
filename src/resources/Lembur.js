@@ -16,7 +16,7 @@ export default {
       },
       parent: {
         name: "",
-        icon: 'AlarmAdd',
+        icon: 'Clock',
       },
       listProperties: ['nik', 'created_at', 'status'],
       editProperties: ['nik', 'status'],

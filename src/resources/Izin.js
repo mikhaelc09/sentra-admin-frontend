@@ -16,7 +16,7 @@ export default {
     },
     parent: {
       name: "",
-      icon: "HealthCross",
+      icon: "Heart",
     },
     filterProperties: [
       "nik_pengaju",

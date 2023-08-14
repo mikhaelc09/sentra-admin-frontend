@@ -15,7 +15,7 @@ export default {
     filterProperties: ['nik','tanggal'],
     parent: {
       name: "",
-      icon: "Money",
+      icon: "DollarSign",
     },
     id: "Penggajian",
     properties:{
@@ -36,7 +36,7 @@ export default {
       },
       SiapkanGajiBulanan:{  
         actionType:'resource',
-        icon:'Money',
+        icon:'PlusCircle',
         component: Components.SiapkanGaji,
         handler: async (request, response, context) => {
           const ddate = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)

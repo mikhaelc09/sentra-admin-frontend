@@ -7,10 +7,10 @@ export default {
   options: {
     parent: {
       name: "",
-      icon: "Location",
+      icon: "Navigation2",
     },
     listProperties: ["nama", "longitude", "latitude"],
-    showProperties: ["nama", "longitude", "latitude", 'peta'],
+    showProperties: ["nama", "longitude", "latitude"],
     filterProperties: ["nama"],
     editProperties: ["nama", "longitude", "latitude"],
     properties: {

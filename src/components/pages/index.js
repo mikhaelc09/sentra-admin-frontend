@@ -9,7 +9,7 @@ const pages = {
   SettingGaji: {
     label: "Setting Gaji",
     component: Components.SettingGaji,
-    icon: "SettingsAdjust",
+    icon: "Settings",
     handler: async (request, response, data) => {
       const gaji = await db["Constant"].findAll({
         raw: true,
@@ -27,7 +27,7 @@ const pages = {
   MonitorAbsensi: {
     label: "Monitor Absensi",
     component: Components.MonitorAbsensi,
-    icon: "Calendar",
+    icon: "List",
     handler: async (request, response, data) => {
       const ddate = new Date(
         new Date().getFullYear(),
@@ -80,7 +80,7 @@ const pages = {
   LaporanAbsensi: {
     label: "Laporan",
     component: Components.LaporanAbsensi,
-    icon: "ReportData",
+    icon: "FileText",
     handler: async (request, response, data) => {
       if (request.payload.type == "absensi") {
         const ddate = request.payload.month.split("-");

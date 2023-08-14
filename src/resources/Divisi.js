@@ -7,7 +7,7 @@ export default {
   options: {
     parent: {
       name: "",
-      icon: "Group",
+      icon: "Users",
     },
     listProperties: ["id", "nama", "tunjangan"],
     showProperties: ["id", "nama", "tunjangan", "list_karyawan"],

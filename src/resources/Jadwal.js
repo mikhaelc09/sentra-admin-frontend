@@ -6,7 +6,7 @@ export default {
   options: {
     parent: {
       name: "",
-      icon: "Timer",
+      icon: "Calendar",
     },
     listProperties: ["nik", "id_lokasi", "hari", "jam_kerja"],
     showProperties: ["nik", "id_lokasi", "hari", "jam_kerja"],

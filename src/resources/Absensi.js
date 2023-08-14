@@ -16,7 +16,7 @@ export default {
     },
     parent: {
       name: "",
-      icon: "ListChecked",
+      icon: "Activity",
     },
     listProperties: ["nik", "created_at", "is_lembur", "status", "keterangan"],
     filterProperties: [
