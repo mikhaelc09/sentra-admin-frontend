@@ -21,10 +21,11 @@
   "homepage": "https://github.com/mikhaelc09/sentra-admin#readme",
   "description": "",
   "dependencies": {
-    "@adminjs/express": "^5.1.0",
-    "@adminjs/sequelize": "^3.0.0",
+    "@adminjs/express": "^6.0.0",
+    "@adminjs/leaflet": "^2.0.0",
+    "@adminjs/sequelize": "^4.0.0",
+    "adminjs": "^7.0.0",
     "@faker-js/faker": "^7.6.0",
-    "adminjs": "^6.8.7",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
@@ -42,6 +43,8 @@
     "sequelize-cli": "^6.6.0"
   },
   "react-dotenv": {
-    "whitelist": ["HERE_API_KEY"]
+    "whitelist": [
+      "HERE_API_KEY"
+    ]
   }
 }
