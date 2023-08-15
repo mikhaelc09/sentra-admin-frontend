@@ -22,10 +22,9 @@
   "description": "",
   "dependencies": {
     "@adminjs/express": "^6.0.0",
-    "@adminjs/leaflet": "^2.0.0",
     "@adminjs/sequelize": "^4.0.0",
-    "adminjs": "^7.0.0",
     "@faker-js/faker": "^7.6.0",
+    "adminjs": "^7.0.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
