@@ -51,6 +51,10 @@ const adminJsOptions = {
     styles: ["/styles/sidebar.css"],
   },
   componentLoader,
+  locale: {
+    language: 'en',
+    availableLanguage: ['en', 'id']
+  }
 };
 
 const adminJS = new AdminJS(adminJsOptions);
