@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell, Legend } from "recharts";
+import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 
 const StatusKaryawan = ({ dataKaryawan }) => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
@@ -24,7 +24,7 @@ const StatusKaryawan = ({ dataKaryawan }) => {
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
-        {`${(percent * 100).toFixed(0)}%`}
+        {percent > 0 && `${(percent * 100).toFixed(0)}%`}
       </text>
     );
   };
@@ -45,6 +45,7 @@ const StatusKaryawan = ({ dataKaryawan }) => {
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>
+      <Tooltip />
       <Legend />
     </PieChart>
   );
