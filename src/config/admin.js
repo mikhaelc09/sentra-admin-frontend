@@ -2,6 +2,7 @@ import AdminJS from "adminjs";
 import SequelizeAdapter from "@adminjs/sequelize";
 import sequelize from "../models/index.js";
 import resources from "./resource.js";
+import moment from "moment";
 import pages from "../components/pages/index.js";
 import { loader as componentLoader, Components } from "../components/index.js";
 
@@ -13,65 +14,108 @@ const adminJsOptions = {
   dashboard: {
     component: Components.Dashboard,
     handler: async () => {
+      const KaryawanMasuk = await sequelize.Absensi.findAndCountAll({
+        where: {
+          created_at: {
+            [sequelize.Sequelize.Op.gte]: new Date(
+              new Date().setHours(0, 0, 1)
+            ),
+          },
+        },
+      });
+      const Karyawan = await sequelize.Karyawan.findAndCountAll();
+      const Izin = await sequelize.Izin.findAndCountAll({
+        where: {
+          status: 2,
+          waktu_mulai: {
+            [sequelize.Sequelize.Op.lte]: new Date(),
+          },
+          waktu_selesai: {
+            [sequelize.Sequelize.Op.gte]: new Date(),
+          },
+        },
+      });
+      const CutiCount = Izin.rows.filter((item) => item.jenis === 1).length;
+      const MCUCount = Izin.rows.filter((item) => item.jenis === 2).length;
+      const PengajuanIzin = await sequelize.Izin.findAndCountAll({
+        where: {
+          status: 1,
+        },
+      });
+      const PengajuanLembur = await sequelize.Lembur.findAndCountAll({
+        where: {
+          status: 1,
+        },
+      });
+
+      const lastWeek = new Date(new Date() - 7 * 24 * 60 * 60 * 1000);
+      const presensiKey = [];
+      for (let i = 0; i < 7; i++) {
+        presensiKey.push(
+          new Date(lastWeek.setDate(lastWeek.getDate() + 1))
+            .toISOString()
+            .split("T")[0]
+        );
+      }
+
+      const Presensi = await sequelize.Absensi.findAndCountAll({
+        where: {
+          created_at: {
+            [sequelize.Sequelize.Op.gte]: presensiKey[0],
+          },
+        },
+        attributes: [
+          [
+            sequelize.Sequelize.fn(
+              "DATE",
+              sequelize.Sequelize.col("created_at")
+            ),
+            "tanggal",
+          ],
+          [sequelize.Sequelize.fn("COUNT", "*"), "jumlah"],
+        ],
+        group: [
+          sequelize.Sequelize.fn("DATE", sequelize.Sequelize.col("created_at")),
+        ],
+      });
+
       return {
         DataKaryawan: [
-          { name: "Masuk", value: 25 },
-          { name: "Izin", value: 4 },
-          { name: "Belum Absen", value: 2 },
+          { name: "Masuk", value: KaryawanMasuk.count },
+          { name: "Izin", value: Izin.count },
+          { name: "Belum Absen", value: Karyawan.count - KaryawanMasuk.count },
         ],
         DataIzin: [
-          { name: "MCU", value: 3 },
-          { name: "Cuti", value: 1 },
+          { name: "MCU", value: MCUCount },
+          { name: "Cuti", value: CutiCount },
         ],
-        DataPresensi: [
-          { jumlah_hadir: 31, name: "09 Jun" },
-          { jumlah_hadir: 31, name: "10 Jun" },
-          { jumlah_hadir: 30, name: "11 Jun" },
-          { jumlah_hadir: 31, name: "12 Jun" },
-          { jumlah_hadir: 31, name: "13 Jun" },
-          { jumlah_hadir: 29, name: "14 Jun" },
-          { jumlah_hadir: 25, name: "15 Jun" },
-        ],
-        DataPengajuanIzin: [
-          {
-            nik: "2021212",
-            mulai: "2023-07-30",
-            selesai: "2023-07-31",
-            jenis: 1,
-          },
-          {
-            nik: "2213112",
-            mulai: "2023-08-05",
-            selesai: "2023-08-07",
-            jenis: 2,
-          },
-          {
-            nik: "2028432",
-            mulai: "2023-08-10",
-            selesai: "2023-08-12",
-            jenis: 1,
-          },
-          {
-            nik: "2067353",
-            mulai: "2023-08-10",
-            selesai: "2023-08-15",
-            jenis: 2,
-          },
-        ],
-        DataPengajuanLembur: [
-          {
-            nik: "46144324",
-            waktu: "2023-07-12",
-          },
-          {
-            nik: "68456785",
-            waktu: "2023-08-10",
-          },
-          {
-            nik: "93345645",
-            waktu: "2023-08-13",
-          },
-        ],
+        DataPresensi: presensiKey.map((v) => {
+          const data = Presensi.count.find((p) => {
+            return p["DATE(`created_at`)"] == v;
+          });
+          return {
+            jumlah_hadir: data ? data.count : 0,
+            name: moment(v).format("DD MMM"),
+          };
+        }),
+        DataPengajuanIzin: PengajuanIzin.rows.map((v) => {
+          return {
+            nik: v.nik,
+            mulai: v.waktu_mulai,
+            selesai: v.waktu_selesai,
+            jenis: v.jenis,
+          };
+        }),
+        DataPengajuanLembur: PengajuanLembur.rows.map((v) => {
+          return {
+            nik: v.nik,
+            waktu: v.created_at,
+          };
+        }),
+        JumlahKaryawan: Karyawan.count,
+        JumlahAbsen: KaryawanMasuk.count,
+        JumlahIzin: Izin.count,
+        Tanggal: moment().format("dddd, D MMMM YYYY"),
       };
     },
   },
@@ -92,9 +136,9 @@ const adminJsOptions = {
   },
   componentLoader,
   locale: {
-    language: 'en',
-    availableLanguage: ['en', 'id']
-  }
+    language: "en",
+    availableLanguage: ["en", "id"],
+  },
 };
 
 const adminJS = new AdminJS(adminJsOptions);
