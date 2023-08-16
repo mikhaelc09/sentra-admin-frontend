@@ -79,17 +79,17 @@ const Dashboard = (props) => {
         <StatBox>
           <H5>Status Kehadiran Karyawan</H5>
           {dataKaryawan.reduce((x, y) => (y.name != 'Belum Absen')? x + y.value : x, 0) > 0 && <StatusKaryawan dataKaryawan={dataKaryawan} />}
-          {dataKaryawan.reduce((x, y) => (y.name != 'Belum Absen')? x + y.value : x, 0) == 0 && <H5>Belum ada karyawan yang absen</H5>}
+          {dataKaryawan.reduce((x, y) => (y.name != 'Belum Absen')? x + y.value : x, 0) == 0 && <H6>Belum ada karyawan yang absen</H6>}
         </StatBox>
         <StatBox>
           <H5>Izin Karyawan</H5>
           {dataIzin.reduce((x, y) => x + y.value, 0) > 0 && <IzinKaryawan dataIzin={dataIzin} />}
-          {dataIzin.reduce((x, y) => x + y.value, 0) == 0 && <H5>Tidak ada karyawan yang izin </H5>}
+          {dataIzin.reduce((x, y) => x + y.value, 0) == 0 && <H6>Tidak ada karyawan yang izin </H6>}
         </StatBox>
         <StatBox flexGrow={2}>
           <H5>Presensi Karyawan</H5>
           {dataPresensi.reduce((x, y) => x + y.jumlah_hadir, 0) > 0 && <PresensiKaryawan dataPresensi={dataPresensi} />}
-          {dataPresensi.reduce((x, y) => x + y.jumlah_hadir, 0) == 0 && <H5>Tidak ada presensi dalam 1 minggu terakhir</H5>}
+          {dataPresensi.reduce((x, y) => x + y.jumlah_hadir, 0) == 0 && <H6>Tidak ada presensi dalam 1 minggu terakhir</H6>}
         </StatBox>
       </Box>
       <Box flex flexDirection={"row"} my={12} flexGrow={1}>
