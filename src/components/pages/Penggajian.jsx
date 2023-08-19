@@ -3,9 +3,7 @@ import {
   Box,
   H4,
   H5,
-  FormGroup,
   Label,
-  Input,
   ValueGroup,
   Button,
   CurrencyInput,
@@ -82,35 +80,19 @@ const Penggajian = (props) => {
         setBPJSKesehatan(val(data, "BPJS Kesehatan"));
         setPPH21(val(data, "Pajak PPH21"));
 
-        setUangMakan({
-          jumlah: val(data, "Uang Makan", "jumlah"),
-          nominal: val(data, "Uang Makan", "nominal"),
-          subtotal: val(data, "Uang Makan", "subtotal"),
-        })
-
-        setUangTransportasi({
-          jumlah: val(data, "Uang Transportasi", "jumlah"),
-          nominal: val(data, "Uang Transportasi", "nominal"),
-          subtotal: val(data, "Uang Transportasi", "subtotal"),
-        })
-
-        setFeeLembur({
-          jumlah: val(data, "Fee Lembur", "jumlah"),
-          nominal: val(data, "Fee Lembur", "nominal"),
-          subtotal: val(data, "Fee Lembur", "subtotal"),
-        })
-
-        setFeeMCU({
-          jumlah: val(data, "Fee MCU", "jumlah"),
-          nominal: val(data, "Fee MCU", "nominal"),
-          subtotal: val(data, "Fee MCU", "subtotal"),
-        })
-
-        setPotongan({
-          jumlah: val(data, "Potongan", "jumlah"),
-          nominal: val(data, "Potongan", "nominal"),
-          subtotal: val(data, "Potongan", "subtotal"),
-        })
+        [
+          { name: "Uang Makan", setter: setUangMakan },
+          { name: "Uang Transportasi", setter: setUangTransportasi },
+          { name: "Fee Lembur", setter: setFeeLembur },
+          { name: "Fee MCU", setter: setFeeMCU },
+          { name: "Potongan", setter: setPotongan },
+        ].forEach((item) => {
+          item.setter({
+            jumlah: val(data, item.name, "jumlah"),
+            nominal: val(data, item.name, "nominal"),
+            subtotal: val(data, item.name, "subtotal"),
+          });
+        });
       });
   }, []);
 
@@ -151,41 +133,50 @@ const Penggajian = (props) => {
       </H4>
 
       <Section>
-        <ValueGroup
-          label="Gaji Pokok"
-          value={rp(gajiPokok)}
-          fontWeight="semibold"
-        />
-        <ValueGroup
-          label="Tunjangan Jabatan"
-          value={rp(tunjanganJabatan)}
-          fontWeight="semibold"
-        />
-        <ValueGroup
-          label="Tunjangan Perusahaan"
-          value={rp(tunjanganPerusahaan)}
-          fontWeight="semibold"
-        />
-        <SubtotalItem
-          label="Uang Makan"
-          item={uangMakan}
-          setter={setUangMakan}
-        />
-        <SubtotalItem
-          label="Uang Transportasi"
-          item={uangTransportasi}
-          setter={setUangTransportasi}
-        />
-        <SubtotalItem
-          label="Fee Lembur"
-          item={feeLembur}
-          setter={setFeeLembur}
-        />
-        <SubtotalItem label="Fee MCU" item={feeMCU} setter={setFeeMCU} />
+        {[
+          { name: "Gaji Pokok", value: gajiPokok },
+          { name: "Tunjangan Jabatan", value: tunjanganJabatan },
+          { name: "Tunjangan Perusahaan", value: tunjanganPerusahaan },
+        ].map((item, index) => {
+          return (
+            <ValueGroup
+              label={item.name}
+              value={rp(item.value)}
+              fontWeight="semibold"
+              key={index}
+            />
+          );
+        })}
+
+        {[
+          { name: "Uang Makan", value: uangMakan, setter: setUangMakan },
+          {
+            name: "Uang Transportasi",
+            value: uangTransportasi,
+            setter: setUangTransportasi,
+          },
+          { name: "Fee Lembur", value: feeLembur, setter: setFeeLembur },
+          { name: "Fee MCU", value: feeMCU, setter: setFeeMCU },
+        ].map((item, index) => {
+          return (
+            <SubtotalItem
+              label={item.name}
+              item={item.value}
+              setter={item.setter}
+              key={index}
+            />
+          );
+        })}
+
         <Label>Lain lain</Label>
         {gajiLainLain.map((item, index) => {
           return (
-            <LainItem item={item} key={index} setter={setGajiLainLain} index={index} />
+            <LainItem
+              item={item}
+              key={index}
+              setter={setGajiLainLain}
+              index={index}
+            />
           );
         })}
         <Button
@@ -200,14 +191,20 @@ const Penggajian = (props) => {
         </Button>
       </Section>
 
+      <H4>Potongan</H4>
       <Section>
         <SubtotalItem label="Potongan" item={potongan} setter={setPotongan} />
         <ValueGroup label="BPJS Kesehatan" value={rp(BPJSKesehatan)} />
-        
+
         <Label>Lain lain</Label>
         {potonganLainLain.map((item, index) => {
           return (
-            <LainItem item={item} key={index} setter={setPotonganLainLain} index={index} />
+            <LainItem
+              item={item}
+              key={index}
+              setter={setPotonganLainLain}
+              index={index}
+            />
           );
         })}
         <Button
