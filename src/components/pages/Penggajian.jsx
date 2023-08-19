@@ -96,6 +96,41 @@ const Penggajian = (props) => {
       });
   }, []);
 
+  useEffect(() => {
+    let [totalGajiLain, totalPotonganLain] = [
+      gajiLainLain,
+      potonganLainLain,
+    ].map((item) => {
+      if(item.length === 0) return 0;
+      return item.reduce(
+        (x, y) => (x + (y.nominal === '') ? 0 : parseInt(y.nominal)),
+        0
+      );
+    });
+    setTotalGaji(
+      gajiPokok +
+        tunjanganJabatan +
+        tunjanganPerusahaan +
+        uangMakan.subtotal +
+        uangTransportasi.subtotal +
+        feeLembur.subtotal +
+        feeMCU.subtotal +
+        totalGajiLain -
+        potongan.subtotal -
+        PPH21 -
+        totalPotonganLain
+    );
+  }, [
+    PPH21,
+    uangMakan,
+    uangTransportasi,
+    feeLembur,
+    feeMCU,
+    potongan,
+    gajiLainLain,
+    potonganLainLain,
+  ]);
+
   const notice = useNotice();
 
   const val = (d, n, p = "subtotal") => {
