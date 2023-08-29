@@ -3,7 +3,7 @@
 const faker = require('@faker-js/faker').faker
 faker.setLocale('id_ID')
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 const data = []
 const nik = [

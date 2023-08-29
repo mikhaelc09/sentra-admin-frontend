@@ -2,7 +2,7 @@ import path from "path";
 import express from "express";
 import adminJS from "./config/admin.js";
 import AdminJSExpress from "@adminjs/express";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { dirname } from "./utils/pathUtils.js";
 import * as dotenv from "dotenv";
 import db from "./models/index.js";
