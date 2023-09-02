@@ -19,11 +19,15 @@ const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
     const user = await db["Karyawan"].findOne({ where: { email } });
     if (user) {
       const matched = await bcrypt.compare(password, user.password);
-      if (matched) {
-        return user;
+      if (!matched) {
+        return null;
       }
+      if(user.is_admin === 0) {
+        return null;
+      }
+      return user
     }
-    return false;
+    return null;
   },
   cookiePassword: process.env.JWT_SECRET,
 });
