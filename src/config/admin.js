@@ -6,78 +6,101 @@ import moment from "moment";
 import pages from "../components/pages/index.js";
 import { loader as componentLoader, Components } from "../components/index.js";
 
+const getKaryawanMasuk = async () => {
+  const KaryawanMasuk = await sequelize.Absensi.findAndCountAll({
+    where: {
+      created_at: {
+        [sequelize.Sequelize.Op.gte]: new Date(new Date().setHours(0, 0, 1)),
+      },
+    },
+  });
+  return KaryawanMasuk;
+};
+
+const getIzin = async () => {
+  const Izin = await sequelize.Izin.findAndCountAll({
+    where: {
+      status: 2,
+      waktu_mulai: {
+        [sequelize.Sequelize.Op.lte]: new Date(),
+      },
+      waktu_selesai: {
+        [sequelize.Sequelize.Op.gte]: new Date(),
+      },
+    },
+  });
+  const CutiCount = Izin.rows.filter((item) => item.jenis === 1).length;
+  const MCUCount = Izin.rows.filter((item) => item.jenis === 2).length;
+  return [Izin, CutiCount, MCUCount];
+};
+
+const getPengajuanIzin = async () => {
+  const PengajuanIzin = await sequelize.Izin.findAndCountAll({
+    where: {
+      status: 1,
+    },
+  });
+  return PengajuanIzin;
+};
+
+const getPengajuanLembur = async () => {
+  const PengajuanLembur = await sequelize.Lembur.findAndCountAll({
+    where: {
+      status: 1,
+    },
+  });
+  return PengajuanLembur;
+};
+
+const getPresensi = async () => {
+  const lastWeek = new Date(new Date() - 7 * 24 * 60 * 60 * 1000);
+  const presensiKey = [];
+  for (let i = 0; i < 7; i++) {
+    presensiKey.push(
+      new Date(lastWeek.setDate(lastWeek.getDate() + 1))
+        .toISOString()
+        .split("T")[0]
+    );
+  }
+
+  const Presensi = await sequelize.Absensi.findAndCountAll({
+    where: {
+      created_at: {
+        [sequelize.Sequelize.Op.gte]: presensiKey[0],
+      },
+    },
+    attributes: [
+      [
+        sequelize.Sequelize.fn("DATE", sequelize.Sequelize.col("created_at")),
+        "tanggal",
+      ],
+      [sequelize.Sequelize.fn("COUNT", "*"), "jumlah"],
+    ],
+    group: [
+      sequelize.Sequelize.fn("DATE", sequelize.Sequelize.col("created_at")),
+    ],
+  });
+  return [presensiKey, Presensi];
+};
+
 AdminJS.registerAdapter({
   Resource: SequelizeAdapter.Resource,
   Database: SequelizeAdapter.Database,
 });
+
 const adminJsOptions = {
   dashboard: {
     component: Components.Dashboard,
     handler: async () => {
-      const KaryawanMasuk = await sequelize.Absensi.findAndCountAll({
-        where: {
-          created_at: {
-            [sequelize.Sequelize.Op.gte]: new Date(
-              new Date().setHours(0, 0, 1)
-            ),
-          },
-        },
-      });
+      const KaryawanMasuk = await getKaryawanMasuk();
       const Karyawan = await sequelize.Karyawan.findAndCountAll();
-      const Izin = await sequelize.Izin.findAndCountAll({
-        where: {
-          status: 2,
-          waktu_mulai: {
-            [sequelize.Sequelize.Op.lte]: new Date(),
-          },
-          waktu_selesai: {
-            [sequelize.Sequelize.Op.gte]: new Date(),
-          },
-        },
-      });
-      const CutiCount = Izin.rows.filter((item) => item.jenis === 1).length;
-      const MCUCount = Izin.rows.filter((item) => item.jenis === 2).length;
-      const PengajuanIzin = await sequelize.Izin.findAndCountAll({
-        where: {
-          status: 1,
-        },
-      });
-      const PengajuanLembur = await sequelize.Lembur.findAndCountAll({
-        where: {
-          status: 1,
-        },
-      });
 
-      const lastWeek = new Date(new Date() - 7 * 24 * 60 * 60 * 1000);
-      const presensiKey = [];
-      for (let i = 0; i < 7; i++) {
-        presensiKey.push(
-          new Date(lastWeek.setDate(lastWeek.getDate() + 1))
-            .toISOString()
-            .split("T")[0]
-        );
-      }
+      const [Izin, CutiCount, MCUCount] = await getIzin();
 
-      const Presensi = await sequelize.Absensi.findAndCountAll({
-        where: {
-          created_at: {
-            [sequelize.Sequelize.Op.gte]: presensiKey[0],
-          },
-        },
-        attributes: [
-          [
-            sequelize.Sequelize.fn(
-              "DATE",
-              sequelize.Sequelize.col("created_at")
-            ),
-            "tanggal",
-          ],
-          [sequelize.Sequelize.fn("COUNT", "*"), "jumlah"],
-        ],
-        group: [
-          sequelize.Sequelize.fn("DATE", sequelize.Sequelize.col("created_at")),
-        ],
-      });
+      const PengajuanIzin = await getPengajuanIzin();
+      const PengajuanLembur = await getPengajuanLembur();
+
+      const [presensiKey, Presensi] = await getPresensi();
 
       return {
         DataKaryawan: [
