@@ -17,6 +17,7 @@ const Components  = {
   MonitorAbsensi: loader.add('MonitorAbsensi', getAbsolutePath('./components/pages/MonitorAbsensi.jsx')),
   LaporanAbsensi: loader.add('LaporanAbsensi', getAbsolutePath('./components/pages/LaporanAbsensi.jsx')),
   Signature: loader.add('Signature', getAbsolutePath('./components/Signature.jsx')),  
+  Login: loader.override('Login', getAbsolutePath('./components/pages/LoginPage.jsx')),
 }
 
 export {
