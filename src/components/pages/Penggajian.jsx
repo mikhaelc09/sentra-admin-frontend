@@ -151,6 +151,17 @@ const Penggajian = (props) => {
           totalGaji: totalGaji,
           PPH21: PPH21 * -1,
           header_id,
+          gajiPokok,
+          tunjanganJabatan,
+          tunjanganPerusahaan,
+          BPJSKesehatan,
+          uangMakan,
+          uangTransportasi,
+          feeLembur,
+          feeMCU,
+          potongan,
+          gajiLainLain,
+          potonganLainLain,
         }),
       })
       .then((response) => {
