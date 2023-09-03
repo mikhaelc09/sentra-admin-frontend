@@ -74,6 +74,15 @@ const Penggajian = (props) => {
           new Date(response.data.record.populated.detail[0].created_at)
         );
         const data = response.data.record.populated.detail;
+        const gajiLain = data.filter((item) => item.judul.includes("bonus"));
+        setGajiLainLain(gajiLain.map(({ judul, nominal, keterangan }) => {
+          return { judul, nominal, keterangan }
+        }))
+        const potonganLain = data.filter((item) => item.judul.includes("potongan"));
+        setPotonganLainLain(potonganLain.map(({ judul, nominal, keterangan }) => {
+          return { judul, nominal, keterangan }
+        }))
+        
         setGajiPokok(val(data, "Gaji Pokok"));
         setTunjanganJabatan(val(data, "Tunjangan Jabatan"));
         setTunjanganPerusahaan(val(data, "Tunjangan Perusahaan"));
@@ -229,7 +238,7 @@ const Penggajian = (props) => {
           onClick={() => {
             setGajiLainLain((prev) => [
               ...prev,
-              { judul: "bonus", nominal: 0, keterangan: "" },
+              { judul: `bonus ${prev.length + 1}`, nominal: 0, keterangan: "" },
             ]);
           }}
         >
@@ -257,7 +266,7 @@ const Penggajian = (props) => {
           onClick={() => {
             setPotonganLainLain((prev) => [
               ...prev,
-              { judul: "potongan", nominal: 0, keterangan: "" },
+              { judul: `potongan ${prev.length + 1}`, nominal: 0, keterangan: "" },
             ]);
           }}
         >

@@ -1,8 +1,6 @@
 import db from "../models/index.js";
 import { Components } from "../components/index.js";
-import HPenggajian from "../models/HPenggajian.js";
 import moment from "moment";
-import { formToJSON } from "axios";
 
 let data = null;
 
@@ -315,10 +313,10 @@ export default {
                           {
                             nominal: values["nominal"],
                             subtotal: values["nominal"],
-                            keterangan: `${values["judul"]} (${values["keterangan"]})`,
+                            keterangan: values["keterangan"],
                           },
                           {
-                            where: { id_header, judul: judul + ` ${k}` },
+                            where: { id_header, judul: values['judul'] },
                           }
                         );
                       })
@@ -333,7 +331,7 @@ export default {
               },
               {
                 where: {
-                  id: data.header_id,
+                  id: id_header,
                 },
               }
             );
@@ -349,6 +347,9 @@ export default {
               id_header: data.params.id,
             },
             raw: true,
+            order:[
+              ['judul', 'ASC']
+            ]
           });
 
           const karyawan = await db["Karyawan"].findByPk(data.params.nik, {
@@ -358,7 +359,6 @@ export default {
           data.populated.detail = detail;
           data.populated.header_id = data.params.id;
           data.populated.karyawan = karyawan;
-          // console.log(data)
           return {
             record: data.toJSON(currentAdmin),
           };

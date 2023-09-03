@@ -1,41 +1,23 @@
 import { FormGroup, Label, Box, Input } from "@adminjs/design-system";
 
-const SubtotalItem = ({item, setter, label, index}) => {
-
+const SubtotalItem = ({ item, setter, label, index }) => {
   const rp = (n) => {
-    return "Rp "+n.toLocaleString("id-ID")
-  }
+    return "Rp " + n.toLocaleString("id-ID");
+  };
 
   return (
     <FormGroup>
       <Label>{label}</Label>
       <Box flex={true} alignItems={"baseline"} flexDirection="row">
-      <Input
-          mx={4}
-          type='text'
-          variant="sm"
-          value={item.judul}
-          placeholder='Judul'
-          onChange={(e) => {
-            setter((prev) => {
-              return prev.map((el, i) => {
-                if (i === index) {
-                  return {
-                    ...el,
-                    judul: e.target.value,
-                  };
-                } 
-                return el;
-              })
-            });
-          }}
-        />
+        <Label fontSize={16} mx={4} fontWeight="semibold">
+          {item.judul}
+        </Label>
         <Input
           mx={4}
-          type='number'
+          type="number"
           variant="sm"
           value={item.nominal}
-          placeholder='Nominal'
+          placeholder="Nominal"
           onChange={(e) => {
             const val = e.target.value === "" ? 0 : e.target.value;
             setter((prev) => {
@@ -45,18 +27,18 @@ const SubtotalItem = ({item, setter, label, index}) => {
                     ...el,
                     nominal: e.target.value,
                   };
-                } 
+                }
                 return el;
-              })
+              });
             });
           }}
         />
         <Input
           mx={4}
-          type='text'
+          type="text"
           variant="sm"
           value={item.keterangan}
-          placeholder='Keterangan'
+          placeholder="Keterangan"
           onChange={(e) => {
             setter((prev) => {
               return prev.map((el, i) => {
@@ -65,9 +47,9 @@ const SubtotalItem = ({item, setter, label, index}) => {
                     ...el,
                     keterangan: e.target.value,
                   };
-                } 
+                }
                 return el;
-              })
+              });
             });
           }}
         />
