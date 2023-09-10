@@ -5,6 +5,8 @@ import resources from "./resource.js";
 import moment from "moment";
 import pages from "../components/pages/index.js";
 import { loader as componentLoader, Components } from "../components/index.js";
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 const getKaryawanMasuk = async () => {
   const KaryawanMasuk = await sequelize.Absensi.findAndCountAll({
@@ -166,6 +168,9 @@ const adminJsOptions = {
 
 const adminJS = new AdminJS(adminJsOptions);
 
-adminJS.watch();
+if(process.env.NODE_ENV === 'production') {
+  await adminJS.initialize();
+}
+else adminJS.watch();
 
 export default adminJS;
