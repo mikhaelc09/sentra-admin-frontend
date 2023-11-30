@@ -20,7 +20,8 @@ const pages = {
         uangMakan: gaji[2].intvalue,
         uangTransportasi: gaji[3].intvalue,
         feeLembur: gaji[4].intvalue,
-        BPJSKesehatan: gaji[5].intvalue,
+        feeMCU: gaji[5].intvalue,
+        BPJSKesehatan: gaji[6].intvalue,
       };
     },
   },
