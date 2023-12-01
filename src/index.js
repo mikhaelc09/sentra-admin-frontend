@@ -35,6 +35,10 @@ const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
 app.get("/admin/logout", (req, res) => {
   res.redirect("/admin/login");
 });
+
+app.use(adminJS.options.rootPath, adminJSRouter);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.put("/api/setting", async (req, res) => {
   const {
     gajiPokok,
@@ -64,9 +68,6 @@ app.put("/api/setting", async (req, res) => {
     message: "Setting berhasil diubah",
   });
 });
-app.use(adminJS.options.rootPath, adminJSRouter);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.listen(PORT, () => {
   console.log(
