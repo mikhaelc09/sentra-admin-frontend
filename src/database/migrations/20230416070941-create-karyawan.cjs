@@ -20,16 +20,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(255)
       },
-      alamat: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
-      tanggal_lahir: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
       no_telp: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING(15)
       },
       no_rekening: {
