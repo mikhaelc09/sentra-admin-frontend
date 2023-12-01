@@ -28,8 +28,6 @@ for (let i = 0; i < 10; i++) {
     nama: `${fn} ${ln}`,
     email: email,
     password: bcrypt.hashSync('123', 12),
-    alamat: faker.address.streetAddress(),
-    tanggal_lahir: faker.date.birthdate(),
     no_telp: faker.phone.number('###-###-####'),
     no_rekening: faker.finance.creditCardNumber('##########'),
     nama_rekening: `${fn} ${ln}`,
