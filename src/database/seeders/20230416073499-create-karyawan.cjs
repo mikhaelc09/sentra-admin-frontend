@@ -36,6 +36,8 @@ for (let i = 0; i < 10; i++) {
     id_divisi: faker.datatype.number({ min: 1, max: 16}),
     status: 1,
     is_admin: faker.datatype.number({ min: 0, max: 1}),
+    gaji_pokok: faker.finance.amount({min: 1_000_000, max: 30_000_000}),
+    tunjangan_perusahaan: faker.finance.amount({min: 1_000_000, max: 30_000_000}),
     created_at: new Date(),
     updated_at: new Date(),
   })

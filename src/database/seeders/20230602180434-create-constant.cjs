@@ -7,18 +7,6 @@ module.exports = {
       "constants",
       [
         {
-          name: "gaji_pokok",
-          valuetype: 2,
-          intvalue: 2_000_000,
-          shortdesc: "Gaji Pokok",
-        },
-        {
-          name: "tunjangan_perusahaan",
-          valuetype: 2,
-          intvalue: 1_000_000,
-          shortdesc: "Tunjangan Perusahaan",
-        },
-        {
           name: "makan",
           valuetype: 2,
           intvalue: 15_000,
