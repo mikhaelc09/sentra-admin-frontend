@@ -57,6 +57,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.SMALLINT
       },
+      gaji_pokok: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+      tunjangan_perusahaan: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
