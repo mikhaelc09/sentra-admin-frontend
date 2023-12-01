@@ -15,13 +15,11 @@ const pages = {
         raw: true,
       });
       return {
-        gajiPokok: gaji[0].intvalue,
-        tunjanganPerusahaan: gaji[1].intvalue,
-        uangMakan: gaji[2].intvalue,
-        uangTransportasi: gaji[3].intvalue,
-        feeLembur: gaji[4].intvalue,
-        feeMCU: gaji[5].intvalue,
-        BPJSKesehatan: gaji[6].intvalue,
+        uangMakan: gaji[0].intvalue,
+        uangTransportasi: gaji[1].intvalue,
+        feeLembur: gaji[2].intvalue,
+        feeMCU: gaji[3].intvalue,
+        BPJSKesehatan: gaji[4].intvalue,
       };
     },
   },

@@ -39,27 +39,17 @@ app.get("/admin/logout", (req, res) => {
 app.use(adminJS.options.rootPath, adminJSRouter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.put("/api/setting", async (req, res) => {
-  const {
-    gajiPokok,
-    tunjanganPerusahaan,
-    uangMakan,
-    uangTransportasi,
-    feeLembur,
-    BPJSKesehatan,
-  } = req.body;
-  const constUpdates = [
-    gajiPokok,
-    tunjanganPerusahaan,
-    uangMakan,
-    uangTransportasi,
-    feeLembur,
-    BPJSKesehatan,
-  ]
-  constUpdates.forEach((value, index) => {
+  [
+    "uangMakan",
+    "uangTransportasi",
+    "feeLembur",
+    "BPJSKesehatan",
+  ].forEach((value, index) => {
     (async () => {
       await db["Constant"].update(
-        { intvalue: parseInt(value) },
+        { intvalue: parseInt(req.body[value]) },
         { where: { id: index + 1 } }
       )
     })()

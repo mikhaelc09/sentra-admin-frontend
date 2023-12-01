@@ -8,8 +8,6 @@ const api = new ApiClient();
 
 const SettingGaji = () => {
   const labelsPair = [
-    { label: "Gaji Pokok", reg: "gajiPokok" },
-    { label: "Tunjangan Perusahaan", reg: "tunjanganPerusahaan" },
     { label: "Uang Makan", reg: "uangMakan" },
     { label: "Uang Transportasi", reg: "uangTransportasi" },
     { label: "Fee Lembur", reg: "feeLembur" },
@@ -63,7 +61,9 @@ const SettingGaji = () => {
                   },
                 })}
               />
-              { errors[i.reg] && <span style={{color: 'red'}}>{errors[i.reg].message}</span> }
+              {errors[i.reg] && (
+                <span style={{ color: "red" }}>{errors[i.reg].message}</span>
+              )}
             </Box>
           );
         })}
