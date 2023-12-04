@@ -18,6 +18,4 @@ const resources = [
   LokasiPentingResource,
 ];
 
-// console.log(resources);
-
 export default resources;
