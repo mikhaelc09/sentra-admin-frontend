@@ -29,6 +29,11 @@ const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
     return null;
   },
   cookiePassword: process.env.JWT_SECRET,
+},null,{
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.JWT_SECRET,
+  name: 'adminjs'
 });
 
 app.get("/admin/logout", (req, res) => {
