@@ -1,5 +1,5 @@
 import moment from "moment";
-import sequelize from "../../../models/index.js";
+import sequelize from "../models/index.js";
 
 const getKaryawanMasuk = async () => {
     const KaryawanMasuk = await sequelize.Absensi.findAndCountAll({

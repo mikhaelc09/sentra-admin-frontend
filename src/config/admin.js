@@ -5,7 +5,7 @@ import resources from "./resource.js";
 import pages from "../components/pages/index.js";
 import { loader as componentLoader, Components } from "../components/index.js";
 import * as dotenv from 'dotenv'
-import dashboardFetcher from "../components/pages/handlers/dashboardFetcher.js";
+import dashboardFetcher from "../hooks/dashboardFetcher.js";
 dotenv.config()
 
 AdminJS.registerAdapter({

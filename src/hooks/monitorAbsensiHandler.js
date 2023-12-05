@@ -1,5 +1,5 @@
 import moment from "moment";
-import db from "../../../models/index.js";
+import db from "../models/index.js";
 
 const Sequelize = db.Sequelize;
 const getMonitorAbsensiData = async (request, response, data) => {

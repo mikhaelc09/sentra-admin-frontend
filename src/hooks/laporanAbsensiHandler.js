@@ -1,7 +1,7 @@
 
-import generateabsensi from "../../../utils/generateabsensi.js";
+import generateabsensi from "../utils/generateabsensi.js";
 import moment from "moment";
-import db from "../../../models/index.js";
+import db from "../models/index.js";
 
 const Sequelize = db.Sequelize;
 

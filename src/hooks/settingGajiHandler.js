@@ -1,4 +1,4 @@
-import db from "../../../models/index.js";
+import db from "../models/index.js";
 
 const getSettings = async (request, response, data) => {
     const gaji = await db["Constant"].findAll({

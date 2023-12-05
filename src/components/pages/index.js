@@ -1,7 +1,7 @@
 import { Components } from "../index.js";
-import getSettings from "./handlers/settingGajiHandler.js";
-import getMonitorAbsensiData from "./handlers/monitorAbsensiHandler.js";
-import getLaporanAbsensi from "./handlers/laporanAbsensiHandler.js";
+import getSettings from "../../hooks/settingGajiHandler.js";
+import getMonitorAbsensiData from "../../hooks/monitorAbsensiHandler.js";
+import getLaporanAbsensi from "../../hooks/laporanAbsensiHandler.js";
 
 const pages = {
   SettingGaji: {
