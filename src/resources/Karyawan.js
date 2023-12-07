@@ -11,8 +11,8 @@ export default {
     },
     listProperties: ["nik", "nama", "email", "status"],
     filterProperties: ["nik", "nama", "email", "status"],
-    editProperties: ["nik","nama","id_divisi","email","no_telp","alamat","nama_rekening","no_rekening","keterangan","status","gaji_pokok", "tunjangan_perusahaan"],
-    showProperties: ["nik","nama","id_divisi","email","no_telp","alamat","nama_rekening","no_rekening","keterangan","tabel_jamkerja","gaji_pokok", "tunjangan_perusahaan"],
+    editProperties: ["nik","nama","id_divisi","email","no_telp","nama_rekening","no_rekening","keterangan","status","gaji_pokok", "tunjangan_perusahaan"],
+    showProperties: ["nik","nama","id_divisi","email","no_telp","nama_rekening","no_rekening","keterangan","tabel_jamkerja","gaji_pokok", "tunjangan_perusahaan"],
     actions: {
       show: { after: [getJadwal()] },
     },
