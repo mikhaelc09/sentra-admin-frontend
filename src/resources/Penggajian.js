@@ -429,6 +429,7 @@ export default {
         actionType: "record",
         component: Components.Penggajian,
         handler: detailGajiHandler,
+        icon: 'Edit'
       },
       show: {
         isVisible: false,
