@@ -8,22 +8,36 @@ import {
   Button,
   CurrencyInput,
   Section,
+  Header,
+  FormGroup,
+  Input,
 } from "@adminjs/design-system";
 import { ApiClient, useNotice } from "adminjs";
 import { toFormData } from "axios";
 import SubtotalItem from "../SubtotalItem";
 import LainItem from "../LainItem";
+import { useForm, Controller } from "react-hook-form";
 
 const api = new ApiClient();
 
 const Penggajian = (props) => {
+  const notice = useNotice();
+  const {
+    control,
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
   const [gajiPokok, setGajiPokok] = useState(0);
   const [tunjanganJabatan, setTunjanganJabatan] = useState(0);
   const [tunjanganPerusahaan, setTunjanganPerusahaan] = useState(0);
   const [BPJSKesehatan, setBPJSKesehatan] = useState(0);
   const [PPH21, setPPH21] = useState(0);
 
-  const [uangMakan, setUangMakan] = useState({
+  const [, uangMakan, setUangMakan] = useState({
     jumlah: 0,
     nominal: 10000,
     subtotal: 0,
@@ -68,82 +82,47 @@ const Penggajian = (props) => {
         actionName: "detail",
       })
       .then((response) => {
-        setHeader_id(response.data.record.populated.header_id);
-        setKaryawan(response.data.record.populated.karyawan);
-        setBulanGaji(
-          new Date(response.data.record.populated.detail[0].created_at)
-        );
-        const data = response.data.record.populated.detail;
-        const gajiLain = data.filter((item) => item.judul.includes("bonus"));
-        setGajiLainLain(gajiLain.map(({ judul, nominal, keterangan }) => {
-          return { judul, nominal, keterangan }
-        }))
-        const potonganLain = data.filter((item) => item.judul.includes("potongan"));
-        setPotonganLainLain(potonganLain.map(({ judul, nominal, keterangan }) => {
-          return { judul, nominal, keterangan }
-        }))
-        
-        setGajiPokok(val(data, "Gaji Pokok"));
-        setTunjanganJabatan(val(data, "Tunjangan Jabatan"));
-        setTunjanganPerusahaan(val(data, "Tunjangan Perusahaan"));
-        setBPJSKesehatan(val(data, "BPJS Kesehatan"));
-        setPPH21(val(data, "Pajak PPH21"));
+        const record = response.data.record;
+        /**
+         * View Details state
+         */
+        setBulanGaji(new Date(record.populated.detail[0].created_at));
+        setKaryawan(record.populated.karyawan);
 
-        [
-          { name: "Uang Makan", setter: setUangMakan },
-          { name: "Uang Transportasi", setter: setUangTransportasi },
-          { name: "Fee Lembur", setter: setFeeLembur },
-          { name: "Fee MCU", setter: setFeeMCU },
-          { name: "Potongan", setter: setPotongan },
-        ].forEach((item) => {
-          item.setter({
-            jumlah: val(data, item.name, "jumlah"),
-            nominal: val(data, item.name, "nominal"),
-            subtotal: val(data, item.name, "subtotal"),
-          });
+        /**
+         * Form Field Values
+         */
+        setValue("header_id", record.populated.header_id);
+        const detail = response.data.record.populated.detail;
+        setValue('total', 0)
+        detail.forEach((r) => {
+          const key = r.judul.split(" ").join("");
+          register(key + ".judul", { value: r.judul });
+          register(key + ".jumlah", { value: r.jumlah });
+          register(key + ".nominal", { value: r.nominal });
+          register(key + ".subtotal", { value: r.subtotal });
         });
+        Object.keys(getValues()).forEach((x) => {
+          const value = getValues()[x]
+          if(value != undefined && value.subtotal != undefined){
+            setValue('total', getValues()['total'] + value.subtotal)
+          }
+        });
+        //REF: https://codesandbox.io/s/focused-montalcini-ehbp3?file=/src/App.tsx
+
+        // const gajiLain = data.filter((item) => item.judul.includes("bonus"));
+        // setGajiLainLain(gajiLain.map(({ judul, nominal, keterangan }) => {
+        //   return { judul, nominal, keterangan }
+        // }))
+        // const potonganLain = data.filter((item) => item.judul.includes("potongan"));
+        // setPotonganLainLain(potonganLain.map(({ judul, nominal, keterangan }) => {
+        //   return { judul, nominal, keterangan }
+        // }))
       });
   }, []);
 
-  useEffect(() => {
-    let [totalGajiLain, totalPotonganLain] = [
-      gajiLainLain,
-      potonganLainLain,
-    ].map((item) => {
-      if(item.length === 0) return 0;
-      return item.reduce(
-        (x, y) => (x + (y.nominal === '') ? 0 : parseInt(y.nominal)),
-        0
-      );
-    });
-    setTotalGaji(
-      gajiPokok +
-        tunjanganJabatan +
-        tunjanganPerusahaan +
-        uangMakan.subtotal +
-        uangTransportasi.subtotal +
-        feeLembur.subtotal +
-        feeMCU.subtotal +
-        totalGajiLain -
-        potongan.subtotal -
-        PPH21 -
-        totalPotonganLain
-    );
-  }, [
-    PPH21,
-    uangMakan,
-    uangTransportasi,
-    feeLembur,
-    feeMCU,
-    potongan,
-    gajiLainLain,
-    potonganLainLain,
-  ]);
-
-  const notice = useNotice();
-
-  const val = (d, n, p = "subtotal") => {
-    return d.find((x) => x.judul === n)[p];
+  const handleQuantityChange = (field, value) => {
+    setValue(`${field}.subtotal`, value);
   };
 
   const rp = (n) => {
@@ -182,46 +161,45 @@ const Penggajian = (props) => {
 
   return (
     <Box variant="white">
-      <H4>
+      <Header>
         Gaji {karyawan.nama} Bulan {bulanGaji.getMonth()} Tahun{" "}
         {bulanGaji.getFullYear()}
-      </H4>
+      </Header>
 
       <Section>
-        {[
-          { name: "Gaji Pokok", value: gajiPokok },
-          { name: "Tunjangan Jabatan", value: tunjanganJabatan },
-          { name: "Tunjangan Perusahaan", value: tunjanganPerusahaan },
-        ].map((item, index) => {
-          return (
-            <ValueGroup
-              label={item.name}
-              value={rp(item.value)}
-              fontWeight="semibold"
-              key={index}
-            />
-          );
-        })}
+        <H4>Gaji</H4>
+        {["GajiPokok", "TunjanganJabatan", "TunjanganPerusahaan"].map(
+          (item, index) => {
+            const data = getValues()[item];
+            return (
+              data && (
+                <FormGroup key={index}>
+                  <Label variant="semibold">{data.judul}</Label>
+                  <CurrencyInput
+                    value={data.nominal}
+                    borderless="true"
+                    prefix="Rp "
+                  />
+                </FormGroup>
+              )
+            );
+          }
+        )}
 
-        {[
-          { name: "Uang Makan", value: uangMakan, setter: setUangMakan },
-          {
-            name: "Uang Transportasi",
-            value: uangTransportasi,
-            setter: setUangTransportasi,
-          },
-          { name: "Fee Lembur", value: feeLembur, setter: setFeeLembur },
-          { name: "Fee MCU", value: feeMCU, setter: setFeeMCU },
-        ].map((item, index) => {
-          return (
-            <SubtotalItem
-              label={item.name}
-              item={item.value}
-              setter={item.setter}
-              key={index}
-            />
-          );
-        })}
+        {["UangMakan", "UangTransportasi", "FeeLembur", "FeeMCU"].map(
+          (item, index) => {
+            const data = getValues()[item];
+            return (
+              <SubtotalItem
+                key={index}
+                data={data}
+                item={item}
+                control={control}
+                handleQuantityChange={handleQuantityChange}
+              />
+            );
+          }
+        )}
 
         <Label>Lain lain</Label>
         {gajiLainLain.map((item, index) => {
@@ -236,19 +214,22 @@ const Penggajian = (props) => {
         })}
         <Button
           onClick={() => {
-            setGajiLainLain((prev) => [
-              ...prev,
-              { judul: `bonus ${prev.length + 1}`, nominal: 0, keterangan: "" },
-            ]);
+            register("GajiLain.");
           }}
         >
           Add More
         </Button>
       </Section>
 
-      <H4>Potongan</H4>
       <Section>
-        <SubtotalItem label="Potongan" item={potongan} setter={setPotongan} />
+        <H4>Potongan</H4>
+        <SubtotalItem
+          data={getValues()["Potongan"]}
+          item={"Potongan"}
+          control={control}
+          handleQuantityChange={handleQuantityChange}
+        />
+
         <ValueGroup label="BPJS Kesehatan" value={rp(BPJSKesehatan)} />
 
         <Label>Lain lain</Label>
@@ -266,7 +247,11 @@ const Penggajian = (props) => {
           onClick={() => {
             setPotonganLainLain((prev) => [
               ...prev,
-              { judul: `potongan ${prev.length + 1}`, nominal: 0, keterangan: "" },
+              {
+                judul: `potongan ${prev.length + 1}`,
+                nominal: 0,
+                keterangan: "",
+              },
             ]);
           }}
         >
@@ -283,9 +268,14 @@ const Penggajian = (props) => {
         />
       </Section>
 
-      <H5 textAlign="right" fontWeight="semibold">
-        Total Gaji: {rp(totalGaji)}
-      </H5>
+      <H5 fontWeight="semibold">Total Gaji</H5>
+      <Controller
+        name={"total"}
+        control={control}
+        render={({ field: { value } }) => {
+          return <CurrencyInput value={value} onClick={()=>{}} prefix="Rp " borderless="true" />;
+        }}
+      />
 
       <Box flex={true} justifyContent="center">
         <Button align="center" onClick={handleUpdate}>
