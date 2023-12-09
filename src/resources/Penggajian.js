@@ -235,16 +235,16 @@ const siapkanGajiBulananHandler = async (request, response, context) => {
             {
               id_header: header_id,
               judul: "Potongan",
-              jumlah: 0,
-              nominal: 1000 * -1,
+              jumlah: -1,
+              nominal: 0,
               subtotal: 0,
             },
             //create bpjs kesehatan
             {
               id_header: header_id,
               judul: "BPJS Kesehatan",
-              jumlah: 1,
-              nominal: constants[4].value * -1,
+              jumlah: -1,
+              nominal: constants[4].value,
               subtotal: constants[4].value * -1,
             },
             //create pph21
