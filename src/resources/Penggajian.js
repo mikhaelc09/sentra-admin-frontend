@@ -3,7 +3,7 @@ import { Components } from "../components/index.js";
 import moment from "moment";
 
 let data = null;
-const Sequelize = db.Sequelize
+const Sequelize = db.Sequelize;
 
 const upsertDetail = async (values, where) => {
   const obj = await db["DPenggajian"].findOne({ ...where });
@@ -17,7 +17,7 @@ const upsertDetail = async (values, where) => {
 
 const getAbsensiKaryawan = async (ddate, karyawan) => {
   const absensi = await db["Absensi"].findAll({
-    where:{
+    where: {
       [Sequelize.Op.and]: [
         Sequelize.where(
           Sequelize.fn("MONTH", Sequelize.col("created_at")),
@@ -28,20 +28,20 @@ const getAbsensiKaryawan = async (ddate, karyawan) => {
           moment(ddate).format("YYYY")
         ),
         Sequelize.where(Sequelize.col("status"), 1),
-        Sequelize.where(Sequelize.col("nik"), karyawan.nik)
+        Sequelize.where(Sequelize.col("nik"), karyawan.nik),
       ],
     },
-    raw: true
-  })
+    raw: true,
+  });
   return {
     jumlah_masuk: absensi.length,
-    jumlah_lembur: absensi.filter(x => x.is_lembur == 1).length
-  }
-}
+    jumlah_lembur: absensi.filter((x) => x.is_lembur == 1).length,
+  };
+};
 
 const getMCUKaryawan = async (ddate, karyawan) => {
   const mcu = await db["Izin"].findAll({
-    where:{
+    where: {
       [Sequelize.Op.and]: [
         Sequelize.where(
           Sequelize.fn("MONTH", Sequelize.col("created_at")),
@@ -53,13 +53,13 @@ const getMCUKaryawan = async (ddate, karyawan) => {
         ),
         Sequelize.where(Sequelize.col("status"), 1),
         Sequelize.where(Sequelize.col("jenis"), 1),
-        Sequelize.where(Sequelize.col("nik_pengaju"), karyawan.nik)
+        Sequelize.where(Sequelize.col("nik_pengaju"), karyawan.nik),
       ],
     },
-    raw: true
-  })
-  return mcu.length
-}
+    raw: true,
+  });
+  return mcu.length;
+};
 
 const dEditMapper = [
   {
@@ -168,8 +168,11 @@ const siapkanGajiBulananHandler = async (request, response, context) => {
             tanggal: moment(ddate).format("YYYY-MM-DD"),
             total: 0,
           });
-          const {jumlah_masuk, jumlah_lembur} = await getAbsensiKaryawan(ddate, karyawan) ;
-          const jumlah_mcu = await getMCUKaryawan(ddate, karyawan) ;     
+          const { jumlah_masuk, jumlah_lembur } = await getAbsensiKaryawan(
+            ddate,
+            karyawan
+          );
+          const jumlah_mcu = await getMCUKaryawan(ddate, karyawan);
           const header_id = header.dataValues.id;
           // console.log(jumlah_masuk)
           // console.log(jumlah_lembur)
@@ -288,79 +291,156 @@ const siapkanGajiBulananHandler = async (request, response, context) => {
 const detailGajiHandler = async (request, response, context) => {
   if (request.method == "post") {
     const payload = request.payload;
-    const jsonString = JSON.stringify(payload)
-      .replace(/'/g, '"')
-      .replace(/\[/g, ".")
-      .replace(/\]/g, "");
 
-    const data = {};
-
-    Object.entries(JSON.parse(jsonString)).forEach(([key, value]) => {
-      const keys = key.split(".");
-      let currentObj = data;
-
-      keys.forEach((innerKey, index) => {
-        if (index === keys.length - 1) {
-          currentObj[innerKey] = value;
-        } else {
-          currentObj[innerKey] = currentObj[innerKey] || {};
-          currentObj = currentObj[innerKey];
+    // Update General Fields
+    [
+      "BPJS Kesehatan",
+      "Fee Lembur",
+      "Fee MCU",
+      "Gaji Pokok",
+      "Pajak PPH21",
+      "Potongan",
+      "Tunjangan Jabatan",
+      "Tunjangan Perusahaan",
+      "Uang Makan",
+      "Uang Transportasi",
+    ].forEach(async (f) => {
+      const key = f.split(" ").join("");
+      const { jumlah, nominal, subtotal } = payload[key];
+      await db["DPenggajian"].update(
+        {
+          jumlah,
+          nominal,
+          subtotal,
+        },
+        {
+          where: {
+            id_header: payload.header_id,
+            judul: f,
+          },
         }
+      );
+    });
+
+    // Update Lain Lain
+    // Fetch data
+    const gajiLain = await db["DPenggajian"].findAll({
+      where: {
+        id_header: payload.header_id,
+        judul: { [db.Sequelize.Op.like]: "$G_%" },
+      },
+      raw: true,
+    });
+
+    const potonganLain = await db["DPenggajian"].findAll({
+      where: {
+        id_header: payload.header_id,
+        judul: { [db.Sequelize.Op.like]: "$P_%" },
+      },
+      raw: true,
+    });
+
+    gajiLain.forEach(async (i) => {
+      const currentItem = payload["GajiLainLain"].find(
+        (x) => x.judul == i.judul
+      );
+
+      // Remove deleted data
+      if (currentItem == null) {
+        return await db["DPenggajian"].destroy({
+          where: {
+            id_header: payload.header_id,
+            judul: i.judul,
+          },
+        });
+      }
+
+      // Update outdated data
+      currentItem.updating = true;
+      return await db["DPenggajian"].update(
+        {
+          keterangan: currentItem.keterangan,
+          jumlah: currentItem.jumlah,
+          nominal: currentItem.nominal,
+          subtotal: currentItem.subtotal,
+        },
+        {
+          where: {
+            id_header: payload.header_id,
+            judul: i.judul,
+          },
+        }
+      );
+    });
+
+    // Add new data
+    const newGaji = payload["GajiLainLain"].filter((p) => p.updating == null);
+    newGaji.forEach(async (i) => {
+      await db["DPenggajian"].create({
+        judul: i.judul,
+        id_header: payload.header_id,
+        keterangan: i.keterangan,
+        jumlah: i.jumlah,
+        nominal: i.nominal,
+        subtotal: i.subtotal,
       });
     });
 
-    const id_header = data.header_id;
+    potonganLain.forEach(async (i) => {
+      const currentItem = payload["PotonganLainLain"].find(
+        (x) => x.judul == i.judul
+      );
 
-    await Promise.all(
-      dEditMapper.map(async ({ judul, key, depth }) => {
-        switch (depth) {
-          case 0:
-            return await db["DPenggajian"].update(
-              {
-                nominal: data[key],
-                subtotal: data[key],
-              },
-              {
-                where: { id_header, judul },
-              }
-            );
-          case 1:
-            return await db["DPenggajian"].update(
-              {
-                jumlah: data[key]["jumlah"],
-                subtotal: data[key]["subtotal"],
-              },
-              {
-                where: { id_header, judul },
-              }
-            );
-          case 2:
-            return await Promise.all(
-              Object.keys(data[key]).map(async (k) => {
-                const values = data[key][k];
-                return await upsertDetail(
-                  {
-                    nominal: values["nominal"],
-                    subtotal: values["nominal"],
-                    keterangan: values["keterangan"],
-                  },
-                  {
-                    where: { id_header, judul: values["judul"] },
-                  }
-                );
-              })
-            );
+      // Remove deleted data
+      if (currentItem == null) {
+        return await db["DPenggajian"].destroy({
+          where: {
+            id_header: payload.header_id,
+            judul: i.judul,
+          },
+        });
+      }
+
+      // Update outdated data
+      currentItem.updating = true;
+      return await db["DPenggajian"].update(
+        {
+          keterangan: currentItem.keterangan,
+          jumlah: currentItem.jumlah,
+          nominal: currentItem.nominal,
+          subtotal: currentItem.subtotal,
+        },
+        {
+          where: {
+            id_header: payload.header_id,
+            judul: i.judul,
+          },
         }
-      })
+      );
+    });
+
+    // Add new data
+    const newPotongan = payload["PotonganLainLain"].filter(
+      (p) => p.updating == null
     );
+    newPotongan.forEach(async (i) => {
+      await db["DPenggajian"].create({
+        judul: i.judul,
+        id_header: payload.header_id,
+        keterangan: i.keterangan,
+        jumlah: i.jumlah,
+        nominal: i.nominal,
+        subtotal: i.subtotal,
+      });
+    });
 
     await db["HPenggajian"].update(
       {
-        total: data.totalGaji,
+        total: data.total,
       },
       {
         where: {
-          id: id_header,
+          id: data.header_id,
         },
       }
     );
@@ -429,7 +509,7 @@ export default {
         actionType: "record",
         component: Components.Penggajian,
         handler: detailGajiHandler,
-        icon: 'Edit'
+        icon: "Edit",
       },
       show: {
         isVisible: false,
