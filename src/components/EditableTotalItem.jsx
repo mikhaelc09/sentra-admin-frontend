@@ -20,7 +20,6 @@ const EditableTotalItem = ({ data, control, item, handleQuantityChange }) => {
                   onChange(newValue);
                   handleQuantityChange(item, newValue * -1);
                 }}
-                allowNegativeValue="true"
                 onBlur={onBlur}
               />
             );
