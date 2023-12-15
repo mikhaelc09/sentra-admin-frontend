@@ -54,9 +54,9 @@ export default {
       },
       status: {
         availableValues: [
-          { value: 0, label: "Rejected" },
-          { value: 1, label: "Pending" },
-          { value: 2, label: "Approved" },
+          { value: 0, label: "Ditolak" },
+          { value: 1, label: "Menunggu" },
+          { value: 2, label: "Disetujui" },
         ],
       },
       jenis: {
