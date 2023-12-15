@@ -1,13 +1,32 @@
 import { useEffect, useState } from "react";
 import { ApiClient } from "adminjs";
-import { Box, H4, Label, Button } from "@adminjs/design-system";
+import {
+  Box,
+  H4,
+  Label,
+  Button,
+  Input,
+  Select,
+  CheckBox,
+} from "@adminjs/design-system";
 import { toFormData } from "axios";
 
 const LaporanAbsensi = (props) => {
-  const [month1, setMonth1] = useState('2023-06');
-  const [month2, setMonth2] = useState('2023-06');
-  const [month3, setMonth3] = useState('2023-06');
+  const [month, setMonth] = useState("2023-06");
+  const [karyawan, setKaryawan] = useState([]);
+  const [selectedKaryawan, setSelectedKaryawan] = useState();
   const api = new ApiClient();
+
+  useEffect(() => {
+    api
+      .getPage({
+        pageName: "LaporanAbsensi",
+        method: "GET",
+      })
+      .then((response) => {
+        setKaryawan(JSON.parse(response.data.karyawan));
+      });
+  }, []);
 
   const generateAbsensi = () => {
     api
@@ -15,8 +34,26 @@ const LaporanAbsensi = (props) => {
         pageName: "LaporanAbsensi",
         method: "POST",
         data: toFormData({
-          month: month1,
+          month: month,
+          karyawan: selectedKaryawan,
           type: "absensi",
+        }),
+      })
+      .then((response) => {
+        window.location.href = "/pdf/" + response.data.url;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const generateAllAbsensi = () => {
+    api
+      .getPage({
+        pageName: "LaporanAbsensi",
+        method: "POST",
+        data: toFormData({
+          month: month,
+          type: "absensiAll",
         }),
       })
       .then((response) => {
@@ -30,56 +67,95 @@ const LaporanAbsensi = (props) => {
   return (
     <Box variant="white">
       <H4>Generate Laporan</H4>
-      <Box mb={12} flex={true} justifyContent={"space-between"} alignItems="baseline">
-        <Box flex={true} alignItems={"baseline"}>
+      <Box
+        flex={true}
+        justifyContent={"space-between"}
+        flexDirection="column"
+        style={{
+          gap: "8px",
+        }}
+      >
+        <Input
+          type="month"
+          value={month}
+          onChange={(e) => {
+            setMonth(e.target.value);
+          }}
+          style={{
+            marginBottom: "8px",
+          }}
+        />
+
+        {/**
+         * Laporan Absensi
+         */}
+        <Box
+          mb={12}
+          flex={true}
+          justifyContent={"space-between"}
+          alignItems="baseline"
+        >
           <Label mr={12} fontSize={16}>
             Laporan Absensi
           </Label>
-          <input
-            type="month"
-            value={month1}
-            onChange={(e) => {
-              setMonth1(e.target.value);
-            }}
-          />
+          <Box flex={true} alignItems={"baseline"} style={{ gap: "12px" }}>
+            {karyawan && (
+              <Select
+                options={karyawan.map((x) => ({
+                  value: x.nik,
+                  label: x.nama,
+                }))}
+                placeholder=" -- Pilih Karyawan -- "
+                value={selectedKaryawan}
+                onChange={(selected) => {
+                  setSelectedKaryawan(selected);
+                }}
+              />
+            )}
+            <Button onClick={generateAbsensi} variant="primary" disabled={!selectedKaryawan}>
+              Generate Absensi{" "}
+              {selectedKaryawan &&
+                karyawan.find((x) => x.nik == selectedKaryawan.value).nama}
+              {
+                !selectedKaryawan && "Satuan"
+              }
+            </Button>
+            <Button onClick={generateAbsensi} variant="primary">
+              Generate Absensi Keseluruhan
+            </Button>
+          </Box>
         </Box>
-        <Button onClick={generateAbsensi} variant="primary">
-          Generate
-        </Button>
-      </Box>
-      <Box mb={12} flex={true} justifyContent={"space-between"} alignItems="baseline">
-        <Box flex={true} alignItems={"baseline"}>
-          <Label mr={12} fontSize={16}>
-            Laporan Penggajian
-          </Label>
-          <input
-            type="month"
-            value={month2}
-            onChange={(e) => {
-              setMonth2(e.target.value);
-            }}
-          />
+
+        <Box
+          mb={12}
+          flex={true}
+          justifyContent={"space-between"}
+          alignItems="baseline"
+        >
+          <Box flex={true} alignItems={"baseline"}>
+            <Label mr={12} fontSize={16}>
+              Laporan Penggajian
+            </Label>
+          </Box>
+          <Button onClick={generateAbsensi} variant="primary" disabled>
+            Generate
+          </Button>
         </Box>
-        <Button onClick={generateAbsensi} variant="primary">
-          Generate
-        </Button>
-      </Box>
-      <Box mb={12} flex={true} justifyContent={"space-between"} alignItems="baseline">
-        <Box flex={true} alignItems={"baseline"}>
-          <Label mr={12} fontSize={16}>
-            Laporan MCU
-          </Label>
-          <input
-            type="month"
-            value={month3}
-            onChange={(e) => {
-              setMonth3(e.target.value);
-            }}
-          />
+        <Box
+          mb={12}
+          flex={true}
+          justifyContent={"space-between"}
+          alignItems="baseline"
+        >
+          <Box flex={true} alignItems={"baseline"}>
+            <Label mr={12} fontSize={16}>
+              Laporan MCU
+            </Label>
+          </Box>
+          <Button onClick={generateAbsensi} variant="primary" disabled>
+            Generate
+          </Button>
         </Box>
-        <Button onClick={generateAbsensi} variant="primary">
-          Generate
-        </Button>
       </Box>
     </Box>
   );

@@ -1,4 +1,3 @@
-
 import generateabsensi from "../utils/generateabsensi.js";
 import moment from "moment";
 import db from "../models/index.js";
@@ -6,8 +5,17 @@ import db from "../models/index.js";
 const Sequelize = db.Sequelize;
 
 const getLaporanAbsensi = async (request, response, data) => {
-  if (request.payload.type == "absensi") {
+  const method = request.method;
+  if (method == "get") {
+    const karyawan = await db["Karyawan"].findAll({
+      raw: true,
+    });
+    return { karyawan: JSON.stringify(karyawan) };
+  }
+
+  if (request.payload.type == "absensiAll") {
     const ddate = request.payload.month.split("-");
+    console.log(ddate)
     const month = ddate[1];
     const year = ddate[0];
     const filterMonth = [
@@ -99,5 +107,4 @@ const getLaporanAbsensi = async (request, response, data) => {
   return "_";
 };
 
-
-export default getLaporanAbsensi
+export default getLaporanAbsensi;
