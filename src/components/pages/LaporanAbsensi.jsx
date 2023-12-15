@@ -64,6 +64,89 @@ const LaporanAbsensi = (props) => {
       });
   };
 
+  const AbsensiControl = () => {
+    return (
+      <Box
+        mb={12}
+        flex={true}
+        justifyContent={"space-between"}
+        alignItems="baseline"
+      >
+        <Label mr={12} fontSize={16}>
+          Laporan Absensi
+        </Label>
+        <Box flex={true} alignItems={"baseline"} style={{ gap: "12px" }}>
+          {karyawan && (
+            <Select
+              options={karyawan.map((x) => ({
+                value: x.nik,
+                label: x.nama,
+              }))}
+              placeholder=" -- Pilih Karyawan -- "
+              value={selectedKaryawan}
+              onChange={(selected) => {
+                setSelectedKaryawan(selected);
+              }}
+            />
+          )}
+          <Button
+            onClick={generateAbsensi}
+            variant="primary"
+            disabled={!selectedKaryawan}
+          >
+            Generate Absensi{" "}
+            {selectedKaryawan &&
+              karyawan.find((x) => x.nik == selectedKaryawan.value).nama}
+            {!selectedKaryawan && "Satuan"}
+          </Button>
+          <Button onClick={generateAllAbsensi} variant="primary">
+            Generate Absensi Keseluruhan
+          </Button>
+        </Box>
+      </Box>
+    );
+  };
+
+  const PenggajianControl = () => {
+    return (
+      <Box
+        mb={12}
+        flex={true}
+        justifyContent={"space-between"}
+        alignItems="baseline"
+      >
+        <Box flex={true} alignItems={"baseline"}>
+          <Label mr={12} fontSize={16}>
+            Laporan Penggajian
+          </Label>
+        </Box>
+        <Button onClick={generateAbsensi} variant="primary" disabled>
+          Generate
+        </Button>
+      </Box>
+    );
+  };
+
+  const MCUControl = () => {
+    return (
+      <Box
+        mb={12}
+        flex={true}
+        justifyContent={"space-between"}
+        alignItems="baseline"
+      >
+        <Box flex={true} alignItems={"baseline"}>
+          <Label mr={12} fontSize={16}>
+            Laporan MCU
+          </Label>
+        </Box>
+        <Button onClick={generateAbsensi} variant="primary" disabled>
+          Generate
+        </Button>
+      </Box>
+    );
+  };
+
   return (
     <Box variant="white">
       <H4>Generate Laporan</H4>
@@ -85,77 +168,9 @@ const LaporanAbsensi = (props) => {
             marginBottom: "8px",
           }}
         />
-
-        {/**
-         * Laporan Absensi
-         */}
-        <Box
-          mb={12}
-          flex={true}
-          justifyContent={"space-between"}
-          alignItems="baseline"
-        >
-          <Label mr={12} fontSize={16}>
-            Laporan Absensi
-          </Label>
-          <Box flex={true} alignItems={"baseline"} style={{ gap: "12px" }}>
-            {karyawan && (
-              <Select
-                options={karyawan.map((x) => ({
-                  value: x.nik,
-                  label: x.nama,
-                }))}
-                placeholder=" -- Pilih Karyawan -- "
-                value={selectedKaryawan}
-                onChange={(selected) => {
-                  setSelectedKaryawan(selected);
-                }}
-              />
-            )}
-            <Button onClick={generateAbsensi} variant="primary" disabled={!selectedKaryawan}>
-              Generate Absensi{" "}
-              {selectedKaryawan &&
-                karyawan.find((x) => x.nik == selectedKaryawan.value).nama}
-              {
-                !selectedKaryawan && "Satuan"
-              }
-            </Button>
-            <Button onClick={generateAbsensi} variant="primary">
-              Generate Absensi Keseluruhan
-            </Button>
-          </Box>
-        </Box>
-
-        <Box
-          mb={12}
-          flex={true}
-          justifyContent={"space-between"}
-          alignItems="baseline"
-        >
-          <Box flex={true} alignItems={"baseline"}>
-            <Label mr={12} fontSize={16}>
-              Laporan Penggajian
-            </Label>
-          </Box>
-          <Button onClick={generateAbsensi} variant="primary" disabled>
-            Generate
-          </Button>
-        </Box>
-        <Box
-          mb={12}
-          flex={true}
-          justifyContent={"space-between"}
-          alignItems="baseline"
-        >
-          <Box flex={true} alignItems={"baseline"}>
-            <Label mr={12} fontSize={16}>
-              Laporan MCU
-            </Label>
-          </Box>
-          <Button onClick={generateAbsensi} variant="primary" disabled>
-            Generate
-          </Button>
-        </Box>
+        <AbsensiControl />
+        <PenggajianControl />
+        <MCUControl />
       </Box>
     </Box>
   );
