@@ -64,7 +64,7 @@ const LaporanAbsensi = (props) => {
       });
   };
 
-  const AbsensiControl = () => {
+  const Control = ({ children, label }) => {
     return (
       <Box
         mb={12}
@@ -72,10 +72,21 @@ const LaporanAbsensi = (props) => {
         justifyContent={"space-between"}
         alignItems="baseline"
       >
-        <Label mr={12} fontSize={16}>
-          Laporan Absensi
-        </Label>
+        <Box flex={true} alignItems={"baseline"}>
+          <Label mr={12} fontSize={16}>
+            {label}
+          </Label>
+        </Box>
         <Box flex={true} alignItems={"baseline"} style={{ gap: "12px" }}>
+          {children}
+        </Box>
+      </Box>
+    );
+  };
+
+  const AbsensiControl = () => {
+    return (
+      <Control label='Laporan Absensi'>
           {karyawan && (
             <Select
               options={karyawan.map((x) => ({
@@ -94,56 +105,34 @@ const LaporanAbsensi = (props) => {
             variant="primary"
             disabled={!selectedKaryawan}
           >
-            Generate Absensi{" "}
+            Generate Absensi {!selectedKaryawan && "Satuan"}
             {selectedKaryawan &&
               karyawan.find((x) => x.nik == selectedKaryawan.value).nama}
-            {!selectedKaryawan && "Satuan"}
           </Button>
-          <Button onClick={generateAllAbsensi} variant="primary">
+          <Button onClick={generateAllAbsensi} variant="contained">
             Generate Absensi Keseluruhan
           </Button>
-        </Box>
-      </Box>
+      </Control>
     );
   };
 
   const PenggajianControl = () => {
     return (
-      <Box
-        mb={12}
-        flex={true}
-        justifyContent={"space-between"}
-        alignItems="baseline"
-      >
-        <Box flex={true} alignItems={"baseline"}>
-          <Label mr={12} fontSize={16}>
-            Laporan Penggajian
-          </Label>
-        </Box>
-        <Button onClick={generateAbsensi} variant="primary" disabled>
+      <Control label='Laporan Penggajian'>
+        <Button onClick={generateAbsensi} variant="contained" disabled>
           Generate
         </Button>
-      </Box>
+      </Control>
     );
   };
 
   const MCUControl = () => {
     return (
-      <Box
-        mb={12}
-        flex={true}
-        justifyContent={"space-between"}
-        alignItems="baseline"
-      >
-        <Box flex={true} alignItems={"baseline"}>
-          <Label mr={12} fontSize={16}>
-            Laporan MCU
-          </Label>
-        </Box>
-        <Button onClick={generateAbsensi} variant="primary" disabled>
+      <Control label='Laporan MCU'>
+        <Button onClick={generateAbsensi} variant="contained" disabled>
           Generate
         </Button>
-      </Box>
+      </Control>
     );
   };
 
