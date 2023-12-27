@@ -31,7 +31,7 @@ export default (sequelize, DataTypes) => {
     status: {
       allowNull: false,
       type: DataTypes.SMALLINT,
-      comment: '0: Belum disetujui, 1: Disetujui, 2: Ditolak'
+      comment: '0: Ditolak, 1: Menunggu, 2: Disetujui'
     },
     created_at: {
       allowNull: false,
