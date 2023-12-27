@@ -41,11 +41,10 @@ const getLaporanAbsensi = async (request, response, data) => {
         `where month(a.created_at) = ${month} and year(a.created_at) = ${year} ` +
         "group by k.nik, date(a.created_at) ",
       {
-        type: db.Sequelize.QueryTypes.SELECT,
+        type: Sequelize.QueryTypes.SELECT,
         nest: true,
       }
     );
-    console.log(rawAbsensi)
     const karyawan = rawAbsensi.reduce((acc, entry) => {
       if (acc == undefined) acc = [];
       if (
@@ -77,11 +76,11 @@ const getLaporanAbsensi = async (request, response, data) => {
         `where month(l.created_at) = ${month} and year(l.created_at) = ${year} ` +
         "group by `Karyawan.nik`, `Lembur.tanggal` ",
       {
-        type: db.Sequelize.QueryTypes.SELECT,
+        type: Sequelize.QueryTypes.SELECT,
         nest: true,
       }
     );
-    console.log(rawLembur)
+
     rawLembur.reduce((acc, entry) => {
       const pivot = acc.find((item) => item.Karyawan.nik == entry.Karyawan.nik);
       if (pivot.Lembur == undefined) pivot.Lembur = [];
@@ -93,8 +92,41 @@ const getLaporanAbsensi = async (request, response, data) => {
     }, karyawan);
 
     //TODO: IZIN & MCU
+    const rawIzin = await db.sequelize.query(
+      "select k.nik as `Karyawan.nik`, k.nama as `Karyawan.nama`, d.nama as `Karyawan.divisi`,  " +
+        "date(i.waktu_mulai) as `Izin.waktu_mulai`, date(i.waktu_selesai) as `Izin.waktu_selesai`,  " +
+        "i.jenis as `Izin.jenis`, i.lokasi as `Izin.lokasi`  " +
+        "from karyawan k join divisi d on k.id_divisi=id " +
+        "left join izin i on i.nik_pengaju=k.nik and i.status = 2 " +
+        `where month(i.waktu_mulai) = ${month} and year(i.waktu_mulai) = ${year} `,
+      {
+        type: Sequelize.QueryTypes.SELECT,
+        nest: true,
+      }
+    );
+    rawIzin.reduce((acc, entry) => {
+      const pivot = acc.find((item) => item.Karyawan.nik == entry.Karyawan.nik);
+      if (pivot.Izin == undefined) {
+        pivot.Izin = [];
+        pivot.MCU = [];
+      }
+      if (entry.Izin.jenis == 0) {
+        pivot.Izin.push({
+          waktu_mulai: entry.Izin.waktu_mulai,
+          waktu_selesai: entry.Izin.waktu_selesai,
+        });
+      } else {
+        pivot.MCU.push({
+          waktu_mulai: entry.Izin.waktu_mulai,
+          waktu_selesai: entry.Izin.waktu_selesai,
+          lokasi: entry.Izin.lokasi,
+        });
+      }
 
-    console.log(karyawan)
+      return acc;
+    }, karyawan);
+
+    console.log(karyawan);
     return {
       karyawan,
       url: generateabsensi({

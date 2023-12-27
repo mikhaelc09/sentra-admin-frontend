@@ -14,10 +14,10 @@ const generateabsensi = ({month, karyawan})  => {
             nik: k.Karyawan.nik,
             nama: k.Karyawan.nama,
             divisi: k.Karyawan.divisi,
-            masuk: `${k.Absensi.length ?? 0}    hari`,
-            lembur: `${k.Lembur.length ?? 0}    hari`,
-            cuti: `${k.cuti ?? 0}    hari`,
-            mcu: `${k.mcu ?? 0}    hari`
+            masuk: `${(k.Absensi ?? []).length}    hari`,
+            lembur: `${(k.Lembur ?? []).length}    hari`,
+            cuti: `${(k.Izin ?? []).length}    hari`,
+            mcu: `${(k.MCU ?? []).length}    hari`
         })
     }
 
