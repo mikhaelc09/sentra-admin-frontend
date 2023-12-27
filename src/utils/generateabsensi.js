@@ -11,11 +11,11 @@ const generateabsensi = ({month, karyawan})  => {
     let tableData = []
     for (const k of karyawan) {
         tableData.push({
-            nik: k.nik,
-            nama: k.nama,
-            divisi: k["Divisi.nama"],
-            masuk: `${k.masuk.length}    hari`,
-            lembur: `${k.lembur ?? 0}    hari`,
+            nik: k.Karyawan.nik,
+            nama: k.Karyawan.nama,
+            divisi: k.Karyawan.divisi,
+            masuk: `${k.Absensi.length ?? 0}    hari`,
+            lembur: `${k.Lembur.length ?? 0}    hari`,
             cuti: `${k.cuti ?? 0}    hari`,
             mcu: `${k.mcu ?? 0}    hari`
         })
