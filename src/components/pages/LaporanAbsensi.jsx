@@ -12,7 +12,11 @@ import {
 import { toFormData } from "axios";
 
 const LaporanAbsensi = (props) => {
-  const [month, setMonth] = useState("2023-06");
+  const [month, setMonth] = useState(
+    `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}`
+  );
   const [karyawan, setKaryawan] = useState([]);
   const [selectedKaryawan, setSelectedKaryawan] = useState();
   const api = new ApiClient();
@@ -86,39 +90,39 @@ const LaporanAbsensi = (props) => {
 
   const AbsensiControl = () => {
     return (
-      <Control label='Laporan Absensi'>
-          {karyawan && (
-            <Select
-              options={karyawan.map((x) => ({
-                value: x.nik,
-                label: x.nama,
-              }))}
-              placeholder=" -- Pilih Karyawan -- "
-              value={selectedKaryawan}
-              onChange={(selected) => {
-                setSelectedKaryawan(selected);
-              }}
-            />
-          )}
-          <Button
-            onClick={generateAbsensi}
-            variant="primary"
-            disabled={!selectedKaryawan}
-          >
-            Generate Absensi {!selectedKaryawan && "Satuan"}
-            {selectedKaryawan &&
-              karyawan.find((x) => x.nik == selectedKaryawan.value).nama}
-          </Button>
-          <Button onClick={generateAllAbsensi} variant="contained">
-            Generate Absensi Keseluruhan
-          </Button>
+      <Control label="Laporan Absensi">
+        {karyawan && (
+          <Select
+            options={karyawan.map((x) => ({
+              value: x.nik,
+              label: x.nama,
+            }))}
+            placeholder=" -- Pilih Karyawan -- "
+            value={selectedKaryawan}
+            onChange={(selected) => {
+              setSelectedKaryawan(selected);
+            }}
+          />
+        )}
+        <Button
+          onClick={generateAbsensi}
+          variant="primary"
+          disabled={!selectedKaryawan}
+        >
+          Generate Absensi {!selectedKaryawan && "Satuan"}
+          {selectedKaryawan &&
+            karyawan.find((x) => x.nik == selectedKaryawan.value).nama}
+        </Button>
+        <Button onClick={generateAllAbsensi} variant="contained">
+          Generate Absensi Keseluruhan
+        </Button>
       </Control>
     );
   };
 
   const PenggajianControl = () => {
     return (
-      <Control label='Laporan Penggajian'>
+      <Control label="Laporan Penggajian">
         <Button onClick={generateAbsensi} variant="contained" disabled>
           Generate
         </Button>
@@ -128,7 +132,7 @@ const LaporanAbsensi = (props) => {
 
   const MCUControl = () => {
     return (
-      <Control label='Laporan MCU'>
+      <Control label="Laporan MCU">
         <Button onClick={generateAbsensi} variant="contained" disabled>
           Generate
         </Button>
