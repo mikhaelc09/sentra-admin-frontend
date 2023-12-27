@@ -39,12 +39,12 @@ const LaporanAbsensi = (props) => {
         method: "POST",
         data: toFormData({
           month: month,
-          karyawan: selectedKaryawan,
+          nik: selectedKaryawan.value,
           type: "absensi",
         }),
       })
       .then((response) => {
-        window.location.href = "/pdf/" + response.data.url;
+        window.open("/pdf/" + response.data.url, '_blank').focus();
       })
       .catch((error) => {
         console.log(error);
@@ -61,7 +61,7 @@ const LaporanAbsensi = (props) => {
         }),
       })
       .then((response) => {
-        window.location.href = "/pdf/" + response.data.url;
+        window.open("/pdf/" + response.data.url, '_blank').focus();
       })
       .catch((error) => {
         console.log(error);
