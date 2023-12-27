@@ -18,9 +18,11 @@ export default (sequelize, DataTypes) => {
       })
       this.hasMany(models.Lembur, {
         foreignKey: 'nik',
+        as: 'Lembur'
       })
       this.hasMany(models.Absensi, {
         foreignKey: 'nik',
+        as: 'Absensi'
       })
       this.hasMany(models.Izin, {
         foreignKey: 'nik_pengaju',
