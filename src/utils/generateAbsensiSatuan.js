@@ -35,22 +35,14 @@ const generateabsensiSatuan = ({ month, absensi }) => {
       const jam_masuk_view = moment
         .tz(a.jam_masuk, "Asia/Jakarta")
         .utcOffset("+07:00");
-        console.log(a.jam_masuk, jam_masuk_view)
-      data.jam_masuk = jam_masuk_view
-        .toISOString()
-        .split("T")[1]
-        .substring(0, 5);
+      data.jam_masuk = jam_masuk_view.format("HH:mm");
     }
 
     if (a.jam_keluar) {
       const jam_keluar_view = moment
         .tz(a.jam_keluar, "Asia/Jakarta")
         .utcOffset("+07:00");
-      console.log(a.jam_keluar, jam_keluar_view)
-      data.jam_keluar = jam_keluar_view
-        .toISOString()
-        .split("T")[1]
-        .substring(0, 5);
+      data.jam_keluar = jam_keluar_view.format("HH:mm");
     }
 
     if (!(a.jam_masuk && a.jam_keluar)) {
