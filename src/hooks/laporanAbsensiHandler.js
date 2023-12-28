@@ -1,5 +1,5 @@
 import generateabsensi from "../utils/generateabsensi.js";
-import generateabsensiSatuan from "../utils/generateabsensiSatuan.js";
+import generateabsensiSatuan from "../utils/generateAbsensiSatuan.js";
 import db from "../models/index.js";
 
 const Sequelize = db.Sequelize;
