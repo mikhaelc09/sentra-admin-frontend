@@ -8,7 +8,12 @@ const generateabsensiSatuan = ({ month, absensi }) => {
   const date = moment(month, "YYYY-MM");
   moment.locale("id");
 
-  console.log(absensi);
+  const dayOfMonth = new Date(
+    month.split("-")[0],
+    month.split("-")[1],
+    0
+  ).getDate();
+
 
   absensi.Absensi = absensi.Absensi.sort(
     (first, next) =>
@@ -40,7 +45,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
       a.keterangan += "Absen tidak lengkap";
     }
 
-    if (a.lembur) {
+    if (a.lembur == true) {
       data.lembur = true;
       data.keterangan = "Lembur";
     }
@@ -51,8 +56,28 @@ const generateabsensiSatuan = ({ month, absensi }) => {
     return data;
   });
 
+  const dataAbsensi = [];
+  for (let i = 1; i <= dayOfMonth; i++) {
+    const tanggal = `${date.format("YYYY-MM")}-${i
+      .toString()
+      .padStart(2, "0")}`;
+    const absen = absensi.Absensi.find((a) => a.tanggal == tanggal);
+    if (absen) dataAbsensi.push(absen);
+    else
+      dataAbsensi.push({
+        tanggal,
+        jam_masuk: "--:--",
+        jam_keluar: "--:--",
+        status: "tidak hadir",
+        lembur: false,
+        keterangan: "",
+        jenis: "Tidak Hadir",
+      });
+  }
+
   doc.setFont("helvetica", "normal");
   doc.setFontSize(16);
+  //TODO: tambah logo sentra di pojok kiri dan header lainnya
   doc.text(`Laporan Absensi Karyawan`, 105, 15, {
     align: "center",
   });
@@ -65,7 +90,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
   autoTable.default(doc, {
     headStyles: { fillColor: 0 },
     startY: 40,
-    body: absensi.Absensi,
+    body: dataAbsensi,
     columns: [
       { header: "Tanggal", dataKey: "tanggal" },
       { header: "Jam Masuk", dataKey: "jam_masuk" },
@@ -75,9 +100,22 @@ const generateabsensiSatuan = ({ month, absensi }) => {
     ],
     theme: "grid",
     didParseCell: (data) => {
-      if (data.row.raw.lembur) data.cell.styles.fillColor = "#00ff00";
-      if (data.row.raw.jenis == "Cuti") data.cell.styles.fillColor = "#ffff00";
-      if (data.row.raw.jenis == "MCU") data.cell.styles.fillColor = "#00ffff";
+      if (data.row.raw.lembur == true) 
+        data.cell.styles.fillColor = "#00ff00";
+
+      else if (data.row.raw.jenis == "Cuti")
+        data.cell.styles.fillColor = "#ffff00";
+
+      else if (data.row.raw.jenis == "MCU")
+        data.cell.styles.fillColor = "#00ffff";
+      
+      else if (data.row.raw.jenis == "Tidak Hadir") {
+        data.cell.styles.fillColor = "#ff0000";
+        data.cell.styles.textColor = "#000000";
+      } 
+      
+      else if (data.row.raw.keterangan == "Absen tidak lengkap")
+        data.cell.styles.fillColor = "#999999";
     },
   });
   //TODO: buat summary singkat jumlah absen

@@ -110,8 +110,6 @@ const getLaporanAbsensi = async (request, response, data) => {
         },
       }
     );
-    console.log('==Izin==')
-    console.log(rawIzin)
 
     rawIzin.reduce((acc, item) => {
       const tanggal_mulai = item.waktu_mulai.split("-")[2];
