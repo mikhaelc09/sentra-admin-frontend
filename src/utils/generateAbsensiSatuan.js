@@ -14,7 +14,6 @@ const generateabsensiSatuan = ({ month, absensi }) => {
     0
   ).getDate();
 
-
   absensi.Absensi = absensi.Absensi.sort(
     (first, next) =>
       parseInt(first.tanggal.split("-")[2]) -
@@ -31,13 +30,25 @@ const generateabsensiSatuan = ({ month, absensi }) => {
       keterangan: "",
       jenis: "Hadir",
     };
-    if (a.jam_masuk)
-      data.jam_masuk = a.jam_masuk.toISOString().split("T")[1].substring(0, 5);
-    if (a.jam_keluar)
-      data.jam_keluar = a.jam_keluar
+    if (a.jam_masuk) {
+      const jam_masuk_view = moment
+        .tz(a.jam_masuk, "Asia/Jakarta")
+        .utcOffset("+07:00");
+      data.jam_masuk = jam_masuk_view
         .toISOString()
         .split("T")[1]
         .substring(0, 5);
+    }
+
+    if (a.jam_keluar) {
+      const jam_keluar_view = moment
+        .tz(a.jam_keluar, "Asia/Jakarta")
+        .utcOffset("+07:00");
+      data.jam_keluar = jam_keluar_view
+        .toISOString()
+        .split("T")[1]
+        .substring(0, 5);
+    }
 
     if (!(a.jam_masuk && a.jam_keluar)) {
       if (a.keterangan) a.keterangan += ", ";
@@ -100,21 +111,15 @@ const generateabsensiSatuan = ({ month, absensi }) => {
     ],
     theme: "grid",
     didParseCell: (data) => {
-      if (data.row.raw.lembur == true) 
-        data.cell.styles.fillColor = "#00ff00";
-
+      if (data.row.raw.lembur == true) data.cell.styles.fillColor = "#00ff00";
       else if (data.row.raw.jenis == "Cuti")
         data.cell.styles.fillColor = "#ffff00";
-
       else if (data.row.raw.jenis == "MCU")
         data.cell.styles.fillColor = "#00ffff";
-      
       else if (data.row.raw.jenis == "Tidak Hadir") {
         data.cell.styles.fillColor = "#ff0000";
         data.cell.styles.textColor = "#000000";
-      } 
-      
-      else if (data.row.raw.keterangan == "Absen tidak lengkap")
+      } else if (data.row.raw.keterangan == "Absen tidak lengkap")
         data.cell.styles.fillColor = "#999999";
     },
   });
