@@ -34,6 +34,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
       const jam_masuk_view = moment
         .tz(a.jam_masuk, "Asia/Jakarta")
         .utcOffset("+07:00");
+        console.log(a.jam_masuk, jam_masuk_view)
       data.jam_masuk = jam_masuk_view
         .toISOString()
         .split("T")[1]
@@ -44,6 +45,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
       const jam_keluar_view = moment
         .tz(a.jam_keluar, "Asia/Jakarta")
         .utcOffset("+07:00");
+      console.log(a.jam_keluar, jam_keluar_view)
       data.jam_keluar = jam_keluar_view
         .toISOString()
         .split("T")[1]
@@ -95,8 +97,8 @@ const generateabsensiSatuan = ({ month, absensi }) => {
   doc.setFontSize(10);
   doc.text(`${"NIK:".padEnd(10)}${absensi.nik}`, 15, 30);
   doc.text(`${"Nama:".padEnd(10)}${absensi.nama}`, 15, 35);
-  doc.text(`${"Divisi:".padEnd(10)}${date.format("MMMM YYYY")}`, 150, 30);
-  doc.text(`${"Periode:".padEnd(10)}${absensi.divisi}`, 150, 35);
+  doc.text(`${"Divisi:".padEnd(10)}${absensi.divisi}`, 150, 30);
+  doc.text(`${"Periode:".padEnd(10)}${date.format("MMMM YYYY")}`, 150, 35);
 
   autoTable.default(doc, {
     headStyles: { fillColor: 0 },
