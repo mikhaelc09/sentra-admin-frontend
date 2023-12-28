@@ -22,6 +22,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
 
   absensi.Absensi = absensi.Absensi.map((a) => {
     const data = {
+      hari: moment(a.tanggal).format("dddd"),
       tanggal: a.tanggal,
       jam_masuk: "--:--",
       jam_keluar: "--:--",
@@ -78,6 +79,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
     if (absen) dataAbsensi.push(absen);
     else
       dataAbsensi.push({
+        hari: moment(tanggal).format("dddd"),
         tanggal,
         jam_masuk: "--:--",
         jam_keluar: "--:--",
@@ -105,6 +107,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
     startY: 40,
     body: dataAbsensi,
     columns: [
+      { header: "Hari", dataKey: "hari" },
       { header: "Tanggal", dataKey: "tanggal" },
       { header: "Jam Masuk", dataKey: "jam_masuk" },
       { header: "Jam Keluar", dataKey: "jam_keluar" },
