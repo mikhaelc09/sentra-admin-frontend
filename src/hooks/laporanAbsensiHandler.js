@@ -272,3 +272,5 @@ const getLaporanAbsensi = async (request, response, data) => {
 };
 
 export default getLaporanAbsensi;
+
+export { getKaryawan, getAbsensiIndividu, getAbsensiReport }
