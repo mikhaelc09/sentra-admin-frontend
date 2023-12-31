@@ -106,3 +106,4 @@ dist
 # AdminJS Bundles
 .adminjs/
 ./src/pdf/*
+./src/debug/*
