@@ -1,5 +1,6 @@
 import { getKaryawan, getAbsensiIndividu, getAbsensiReport } from '../hooks/laporanAbsensiHandler.js';
 import chalk from 'chalk';
+import util from 'util';
 
 const testGetKaryawan = async () => {
     console.log(chalk.bgBlue('test getKaryawan()'));
@@ -9,6 +10,7 @@ const testGetKaryawan = async () => {
         return 1
     }
     catch(e) {
+        console.error(chalk.red(e))
         return 0
     }
 }
@@ -21,6 +23,7 @@ const testGetAbsensiIndividu = async () => {
         return 1
     }
     catch(e){
+        console.error(chalk.red(e))
         return 0;
     }
 }
@@ -29,10 +32,11 @@ const testGetAbsensiReport = async () => {
     console.log(chalk.bgBlue('test getAbsensiReport()'));
     try{
         const absensi = await getAbsensiReport(12, 2023);
-        console.dirxml(absensi);
+        console.log(util.inspect(absensi, { colors: true, depth: null }));
         return 1
     }
     catch(e){
+        console.error(chalk.red(e))
         return 0;
     }
 }
