@@ -8,80 +8,6 @@ const generateabsensiSatuan = ({ month, absensi }) => {
   const date = moment(month, "YYYY-MM");
   moment.locale("id");
 
-  const dayOfMonth = new Date(
-    month.split("-")[0],
-    month.split("-")[1],
-    0
-  ).getDate();
-
-  absensi.Absensi = absensi.Absensi.sort(
-    (first, next) =>
-      parseInt(first.tanggal.split("-")[2]) -
-      parseInt(next.tanggal.split("-")[2])
-  );
-
-  absensi.Absensi = absensi.Absensi.map((a) => {
-    const data = {
-      hari: moment(a.tanggal).format("dddd"),
-      tanggal: a.tanggal,
-      jam_masuk: "--:--",
-      jam_keluar: "--:--",
-      status: a.status,
-      lembur: false,
-      keterangan: "",
-      jenis: "Hadir",
-    };
-    if (a.jam_masuk) {
-      const jam_masuk_view = moment
-        .tz(a.jam_masuk, "Asia/Jakarta")
-        .utcOffset("+07:00");
-      data.jam_masuk = jam_masuk_view.format("HH:mm");
-    }
-
-    if (a.jam_keluar) {
-      const jam_keluar_view = moment
-        .tz(a.jam_keluar, "Asia/Jakarta")
-        .utcOffset("+07:00");
-      data.jam_keluar = jam_keluar_view.format("HH:mm");
-    }
-
-    if (!(a.jam_masuk && a.jam_keluar)) {
-      if (a.keterangan) a.keterangan += ", ";
-      else a.keterangan = "";
-      a.keterangan += "Absen tidak lengkap";
-    }
-
-    if (a.lembur == true) {
-      data.lembur = true;
-      data.keterangan = "Lembur";
-    }
-
-    if (a.keterangan) data.keterangan = a.keterangan;
-    if (a.jenis) data.jenis = a.jenis;
-
-    return data;
-  });
-
-  const dataAbsensi = [];
-  for (let i = 1; i <= dayOfMonth; i++) {
-    const tanggal = `${date.format("YYYY-MM")}-${i
-      .toString()
-      .padStart(2, "0")}`;
-    const absen = absensi.Absensi.find((a) => a.tanggal == tanggal);
-    if (absen) dataAbsensi.push(absen);
-    else
-      dataAbsensi.push({
-        hari: moment(tanggal).format("dddd"),
-        tanggal,
-        jam_masuk: "--:--",
-        jam_keluar: "--:--",
-        status: "tidak hadir",
-        lembur: false,
-        keterangan: "",
-        jenis: "Tidak Hadir",
-      });
-  }
-
   doc.setFont("helvetica", "normal");
   doc.setFontSize(16);
   //TODO: tambah logo sentra di pojok kiri dan header lainnya
@@ -97,7 +23,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
   autoTable.default(doc, {
     headStyles: { fillColor: 0 },
     startY: 40,
-    body: dataAbsensi,
+    body: absensi.DataAbsensi,
     columns: [
       { header: "Hari", dataKey: "hari" },
       { header: "Tanggal", dataKey: "tanggal" },
