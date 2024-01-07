@@ -338,7 +338,7 @@ const getAbsensiReport = async (month, year) => {
     const detail = await getDetailAbsensi(month, year, a.Karyawan.nik)
     return {
       ...a,
-      Detail: detail.Absensi
+      Detail: detail.DataAbsensi
     }
   }))
 
