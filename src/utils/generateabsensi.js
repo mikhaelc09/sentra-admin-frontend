@@ -8,13 +8,15 @@ const generateabsensi = ({ month, karyawan }) => {
   const date = moment(month, "YYYY-MM");
 
   let tableData = [];
+  console.log(karyawan)
+  console.log(karyawan[0].Absensi)
   for (const k of karyawan) {
     tableData.push({
       nik: k.Karyawan.nik,
       nama: k.Karyawan.nama,
       divisi: k.Karyawan.divisi,
       masuk: `${
-        (k.Absensi.filter((a) => a.status == "hadir") ?? []).length
+        (k.Absensi.filter((a) => a.status == 1) ?? []).length
       }    hari`,
       lembur: `${(k.Lembur ?? []).length}    hari`,
       cuti: `${(k.Izin ?? []).length}    hari`,
