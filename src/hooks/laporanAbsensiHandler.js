@@ -26,6 +26,24 @@ const getKaryawan = async () => {
  */
 const getDetailAbsensi = async (month, year, nik) => {
   const queryWhere = { month, year, nik };
+  const rawKaryawan = await db.sequelize.query(
+    "select k.nik as `Karyawan.nik`, k.nama as `Karyawan.nama`, d.nama as `Karyawan.divisi` " +
+      "from karyawan k join divisi d on k.id_divisi=id " +
+      "where k.nik = :nik ",
+    {
+      type: Sequelize.QueryTypes.SELECT,
+      replacements: {
+        nik,
+      },
+      nest: true,
+    }
+  );
+
+  let detail = {
+    ...rawKaryawan[0].Karyawan,
+    Absensi: [],
+  };
+
   const rawAbsensi = await db.sequelize.query(
     "select k.nik as `Karyawan.nik`, k.nama as `Karyawan.nama`, d.nama as `Karyawan.divisi`, date(a.created_at) as `Absensi.tanggal`, " +
       "a.created_at as `Absensi.jam`, a.status `Absensi.status` " +
@@ -42,12 +60,6 @@ const getDetailAbsensi = async (month, year, nik) => {
       nest: true,
     }
   );
-
-
-  let detail = {
-    ...rawAbsensi[0].Karyawan,
-    Absensi: [],
-  };
 
   rawAbsensi.reduce((acc, entry) => {
     const index = acc.Absensi.findIndex(
