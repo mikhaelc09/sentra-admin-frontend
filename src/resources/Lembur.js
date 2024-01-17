@@ -25,8 +25,8 @@ export default {
       properties:{
         status:{
           availableValues:[
-            { value: 0, label: 'Ditolak' },
-            { value: 1, label: 'Menunggu' },
+            { value: 0, label: 'Menunggu' },
+            { value: 1, label: 'Ditolak' },
             { value: 2, label: 'Disetujui' },
           ]
         },

@@ -5,7 +5,7 @@ import { useNotice } from 'adminjs'
 import axios from 'axios'
 
 const ConfirmLembur = (props) => {
-    const [isPending, setIsPending] = useState(props.record.params.status == 1);
+    const [isPending, setIsPending] = useState(props.record.params.status == 0);
     const notice = useNotice()
     const handleTolak = async () => {
         await axios.post(`/admin/api/resources/lembur/records/${props.record.params.id}/edit`,axios.toFormData({
