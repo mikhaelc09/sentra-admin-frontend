@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { ApiClient } from "adminjs";
+import moment from "moment";
 import {
   Box,
   H4,
+  H6,
   Label,
   Button,
   Input,
   Select,
-  CheckBox,
 } from "@adminjs/design-system";
 import { toFormData } from "axios";
 
@@ -17,6 +18,10 @@ const LaporanAbsensi = (props) => {
       .toString()
       .padStart(2, "0")}`
   );
+  const [periode, setPeriode] = useState({
+    start: new Date(month),
+    end: new Date(month),
+  })
   const [karyawan, setKaryawan] = useState([]);
   const [selectedKaryawan, setSelectedKaryawan] = useState();
   const api = new ApiClient();
@@ -31,6 +36,18 @@ const LaporanAbsensi = (props) => {
         setKaryawan(JSON.parse(response.data.karyawan));
       });
   }, []);
+
+  useEffect(() => {
+    const [strYear, strMonth] = month.split('-')
+    const startDate = moment(`${strYear}-${strMonth}-26`, "YYYY-MM-DD")
+    const endDate = moment(`${strYear}-${strMonth}-25`, "YYYY-MM-DD")
+    startDate.subtract(1, 'month')
+    setPeriode({
+      start: startDate.toDate(),
+      end: endDate.toDate()
+    })
+  
+  }, [month])
 
   const generateAbsensi = () => {
     api
@@ -151,16 +168,32 @@ const LaporanAbsensi = (props) => {
           gap: "8px",
         }}
       >
-        <Input
-          type="month"
-          value={month}
-          onChange={(e) => {
-            setMonth(e.target.value);
-          }}
+        <Box
+          flex={true}
+          justifyContent={"space-between"}
+          flexDirection="row"
           style={{
-            marginBottom: "8px",
+            gap: "8px",
           }}
-        />
+        >
+          <Input
+            type="month"
+            value={month}
+            onChange={(e) => {
+              setMonth(e.target.value);
+            }}
+            style={{
+              marginBottom: "8px"
+            }}
+          />
+          <H6  
+          style={{
+            marginTop:'auto',
+            marginBottom: 'auto'
+          }}>
+            laporan dibuat untuk tanggal {periode.start.toLocaleDateString()} sampai {periode.end.toLocaleDateString()}
+          </H6>
+        </Box>
         <AbsensiControl />
         <PenggajianControl />
         <MCUControl />
