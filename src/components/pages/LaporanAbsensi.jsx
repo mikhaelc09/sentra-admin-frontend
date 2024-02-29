@@ -13,6 +13,9 @@ import {
 import { toFormData } from "axios";
 
 const LaporanAbsensi = (props) => {
+  /**
+   * State
+   */
   const [month, setMonth] = useState(
     `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
       .toString()
@@ -26,6 +29,9 @@ const LaporanAbsensi = (props) => {
   const [selectedKaryawan, setSelectedKaryawan] = useState();
   const api = new ApiClient();
 
+  /**
+   * UseEffects
+   */
   useEffect(() => {
     api
       .getPage({
@@ -46,16 +52,21 @@ const LaporanAbsensi = (props) => {
       start: startDate.toDate(),
       end: endDate.toDate()
     })
-  
+
   }, [month])
 
+  /**
+   * Handlers
+   * Lihat di  src/hooks/laporanAbsensiHandler.js
+   */
   const generateAbsensi = () => {
     api
       .getPage({
         pageName: "LaporanAbsensi",
         method: "POST",
         data: toFormData({
-          month: month,
+          periodeStart: periode['start'].toISOString().split("T")[0],
+          periodeEnd: periode['end'].toISOString().split("T")[0],
           nik: selectedKaryawan.value,
           type: "absensi",
         }),
@@ -67,13 +78,15 @@ const LaporanAbsensi = (props) => {
         console.log(error);
       });
   };
+
   const generateAllAbsensi = () => {
     api
       .getPage({
         pageName: "LaporanAbsensi",
         method: "POST",
         data: toFormData({
-          month: month,
+          periodeStart: periode['start'].toISOString().split("T")[0],
+          periodeEnd: periode['end'].toISOString().split("T")[0],
           type: "absensiAll",
         }),
       })
@@ -85,6 +98,9 @@ const LaporanAbsensi = (props) => {
       });
   };
 
+  /**
+   * Components
+   */
   const Control = ({ children, label }) => {
     return (
       <Box
@@ -157,6 +173,10 @@ const LaporanAbsensi = (props) => {
     );
   };
 
+
+  /**
+   * Default parent
+   */
   return (
     <Box variant="white">
       <H4>Generate Laporan</H4>
@@ -186,12 +206,12 @@ const LaporanAbsensi = (props) => {
               marginBottom: "8px"
             }}
           />
-          <H6  
-          style={{
-            marginTop:'auto',
-            marginBottom: 'auto'
-          }}>
-            laporan dibuat untuk tanggal {periode.start.toLocaleDateString()} sampai {periode.end.toLocaleDateString()}
+          <H6
+            style={{
+              marginTop: 'auto',
+              marginBottom: 'auto'
+            }}>
+            Laporan dibuat untuk tanggal {moment(periode.start).format("DD MMMM YYYY")} sampai {moment(periode.end).format("DD MMMM YYYY")}
           </H6>
         </Box>
         <AbsensiControl />
