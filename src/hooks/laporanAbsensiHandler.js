@@ -24,76 +24,93 @@ const getKaryawan = async () => {
  * Handler untuk mengembalikan value absensi karyawan secara individual
  * Data akan dikirim untuk diolah menjadi laporan individu
  */
-const getDetailAbsensi = async (month, year, nik) => {
-  const queryWhere = { month, year, nik };
-  const rawKaryawan = await db.sequelize.query(
-    "select k.nik as `Karyawan.nik`, k.nama as `Karyawan.nama`, d.nama as `Karyawan.divisi` " +
-      "from karyawan k join divisi d on k.id_divisi=id " +
-      "where k.nik = :nik ",
-    {
-      type: Sequelize.QueryTypes.SELECT,
-      replacements: {
-        nik,
+const getDetailAbsensi = async (nik, start, end) => {
+  const queryTanggal = { 
+    [Sequelize.Op.and]: [
+      {
+        created_at: {
+          [Sequelize.Op.gte]: new Date(start.year, start.month - 1, start.day, 0, 0)
+        }
       },
-      nest: true,
-    }
-  );
+      {
+        created_at: {
+          [Sequelize.Op.lte]: new Date(end.year, end.month - 1, end.day, 23, 59)
+        }
+      },
+    ] 
+  };
+  const rawKaryawan = await db["Karyawan"].findOne({
+    where: {
+      nik: nik
+    },
+    include: {
+      model: db["Divisi"],
+      as: "Divisi",
+      attributes: ["nama"]
+    },
+    attributes:['nik', 'nama'],
+    raw: true
+  })
 
   let detail = {
-    ...rawKaryawan[0].Karyawan,
+    nik: rawKaryawan.nik,
+    nama: rawKaryawan.nama,
+    divisi: rawKaryawan['Divisi.nama'],
     Absensi: [],
   };
 
-  const rawAbsensi = await db.sequelize.query(
-    "select k.nik as `Karyawan.nik`, k.nama as `Karyawan.nama`, d.nama as `Karyawan.divisi`, date(a.created_at) as `Absensi.tanggal`, " +
-      "a.created_at as `Absensi.jam`, a.status `Absensi.status` " +
-      "from karyawan k join divisi d on k.id_divisi=id  " +
-      "left join absensi a on a.nik=k.nik and a.status = 1 " +
-      "where month(a.created_at) = :month and year(a.created_at) = :year and k.nik = :nik ",
+  const rawAbsensi = await db["Absensi"].findAll(
     {
-      type: Sequelize.QueryTypes.SELECT,
-      replacements: {
-        month,
-        year,
-        nik,
+      where: {
+        status: 1,
+        nik:nik,
+        ...queryTanggal
       },
-      nest: true,
+      attributes: [
+        [Sequelize.fn('date', Sequelize.col('created_at')), 'tanggal'],
+        [Sequelize.fn('time', Sequelize.col('created_at')), 'jam']
+      ],
+      raw: true,
     }
-  );
+  )
 
   rawAbsensi.reduce((acc, entry) => {
     const index = acc.Absensi.findIndex(
-      (item) => item.tanggal == entry.Absensi.tanggal
+      (item) => item.tanggal == entry.tanggal
     );
 
     if (index == -1) {
       acc.Absensi.push({
-        tanggal: entry.Absensi.tanggal,
-        jam_masuk: entry.Absensi.jam,
+        tanggal: entry.tanggal,
+        jam_masuk: entry.jam,
         jam_keluar: null,
-        status: entry.Absensi.status,
+        lembur: false
       });
 
       return acc;
     }
-    acc.Absensi[index].jam_keluar = entry.Absensi.jam;
+    acc.Absensi[index].jam_keluar = entry.jam;
 
     return acc;
   }, detail);
 
-  const rawLembur = await db.sequelize.query(
-    "select nik, created_at, status from lembur " +
-      "where month(created_at) = :month and year(created_at) = :year and nik = :nik and status = 2",
+  const rawLembur = await db["Lembur"].findAll(
     {
-      type: Sequelize.QueryTypes.SELECT,
-      replacements: queryWhere,
-      nest: true,
+      where: {
+        status: 2,
+        nik:nik,
+        ...queryTanggal
+      },
+      attributes: [
+        [Sequelize.fn('date', Sequelize.col('created_at')), 'tanggal'],
+      ],
+      raw: true,
     }
-  );
+  )
 
   rawLembur.reduce((acc, l) => {
     const index = acc.Absensi.findIndex((item) => {
-      return item.tanggal == l.created_at.toISOString().split("T")[0];
+      return item.tanggal == l.tanggal;
     });
 
     if (index != -1) acc.Absensi[index].lembur = true;
@@ -101,19 +118,30 @@ const getDetailAbsensi = async (month, year, nik) => {
     return acc;
   }, detail);
 
-  const rawIzin = await db.sequelize.query(
-    "select waktu_mulai, waktu_selesai, keterangan, lokasi, jenis " +
-      "from izin where status = 2 and month(created_at) = :month " +
-      "and year(created_at) = :year and nik_pengaju = :nik",
+  const rawIzin = await db["Izin"].findAll(
     {
-      type: Sequelize.QueryTypes.SELECT,
-      replacements: queryWhere,
+      where: {
+        status: 2,
+        nik_pengaju: nik,
+        ...queryTanggal
+      },
+      attributes: [
+        [Sequelize.fn('date', Sequelize.col('waktu_mulai')), 'waktu_mulai'],
+        [Sequelize.fn('date', Sequelize.col('waktu_selesai')), 'waktu_selesai'],
+        'keterangan',
+        'jenis',
+        'lokasi'
+      ],
+      raw: true,
     }
-  );
+  )
 
   rawIzin.reduce((acc, item) => {
     const tanggal_mulai = item.waktu_mulai.split("-")[2];
     const tanggal_selesai = item.waktu_selesai.split("-")[2];
+    const month = item.waktu_mulai.split("-")[1];
+    const year = item.waktu_mulai.split("-")[0];
+
     for (let i = tanggal_mulai; i <= tanggal_selesai; i++) {
       const data = {
         tanggal: `${year}-${month}-${i}`,
@@ -138,7 +166,6 @@ const getDetailAbsensi = async (month, year, nik) => {
       parseInt(next.tanggal.split("-")[2])
   );
 
-  // 
   detail.Absensi = detail.Absensi.map((a) => {
     // Format absensi menjadi record yang lebih mudah dibaca dan terstruktur
     const data = {
@@ -155,9 +182,8 @@ const getDetailAbsensi = async (month, year, nik) => {
     // Masukkan jam masuk ke dalam record absensi
     if (a.jam_masuk) {
       // Melakukan formatting tanggal agar sesuai dengan timezone Jakarta
-      const jam_masuk_view = moment
-        .tz(a.jam_masuk, "Asia/Jakarta")
-        .utcOffset("+07:00");
+      const jam_masuk_view = moment(a.jam_masuk, 'hh:mm:ss')
+        .utcOffset(7)
 
       // Format jam masuk menjadi HH:mm
       data.jam_masuk = jam_masuk_view.format("HH:mm");
@@ -166,8 +192,7 @@ const getDetailAbsensi = async (month, year, nik) => {
     // Masukkan jam keluar ke dalam record absensi
     if (a.jam_keluar) {
       // Melakukan formatting tanggal agar sesuai dengan timezone Jakarta
-      const jam_keluar_view = moment
-        .tz(a.jam_keluar, "Asia/Jakarta")
+      const jam_keluar_view = moment(a.jam_keluar, "hh:mm:ss")
         .utcOffset("+07:00");
       // Format jam keluar menjadi HH:mm
       data.jam_keluar = jam_keluar_view.format("HH:mm");
@@ -184,8 +209,8 @@ const getDetailAbsensi = async (month, year, nik) => {
     }
 
     // Jika absensi merupakan lembur, maka tambahkan keterangan
-    if (a.lembur == true) {
-      data.lembur = true;
+    if(a.lembur == true){
+      data.lembur = a.lembur;
       data.keterangan = "Lembur";
     }
 
@@ -197,23 +222,16 @@ const getDetailAbsensi = async (month, year, nik) => {
 
 
   const dataAbsensi = [];
-  const dayOfMonth = new Date(
-    year,
-    month,
-    0
-  ).getDate();
-  const date = moment(`${year}-${month}`, "YYYY-MM");
-
-  for (let i = 1; i <= dayOfMonth; i++) {
-    const tanggal = `${date.format("YYYY-MM")}-${i
-      .toString()
-      .padStart(2, "0")}`;
-    const absen = detail.Absensi.find((a) => a.tanggal == tanggal);
+  const startDate = moment(`${start.year}-${start.month}-${start.day}`)
+  const endDate = moment(`${end.year}-${end.month}-${end.day}`)
+  while(startDate <= endDate){
+    //Append to DataAbsensi
+    const absen = detail.Absensi.find((a) => a.tanggal == startDate.format("YYYY-MM-DD"));
     if (absen) dataAbsensi.push(absen);
     else
       dataAbsensi.push({
-        hari: moment(tanggal).format("dddd"),
-        tanggal,
+        hari: moment(startDate).format("dddd"),
+        tanggal: startDate.format("YYYY-MM-DD"),
         jam_masuk: "--:--",
         jam_keluar: "--:--",
         status: "tidak hadir",
@@ -221,8 +239,9 @@ const getDetailAbsensi = async (month, year, nik) => {
         keterangan: "",
         jenis: "Tidak Hadir",
       });
+    //Add startDate
+    startDate.add(1, 'day')
   }
-
   detail.DataAbsensi = dataAbsensi;
 
   return detail;
@@ -365,16 +384,28 @@ const getLaporanAbsensi = async (request, response, data) => {
   }
 
   if (request.payload.type == "absensi") {
-    const periode = request.payload.month;
-    const month = periode.split("-")[1];
-    const year = periode.split("-")[0];
+    const _periodeStart = request.payload.periodeStart.split("-");
+    const periodeStart = {
+      day: _periodeStart[2],
+      month: _periodeStart[1],
+      year: _periodeStart[0]
+    }
+    const _periodeEnd = request.payload.periodeEnd.split("-");
+    const periodeEnd = {
+      day: _periodeEnd[2],
+      month: _periodeEnd[1],
+      year: _periodeEnd[0]
+    }
     const nik = request.payload.nik;
-    const absensi = await getDetailAbsensi(month, year, nik);
+    const absensi = await getDetailAbsensi(nik, periodeStart, periodeEnd);
+    const startDate = moment(`${periodeStart.year}-${periodeStart.month}-${periodeStart.day}`)
+    const endDate = moment(`${periodeEnd.year}-${periodeEnd.month}-${periodeEnd.day}`)
 
     return {
       absensi,
       url: generateabsensiSatuan({
-        month: periode,
+        start: startDate,
+        end: endDate,
         absensi,
       }),
     };
