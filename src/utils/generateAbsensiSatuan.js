@@ -3,9 +3,8 @@ import autoTable from "jspdf-autotable";
 import moment from "moment";
 import { getAbsolutePath } from "./pathUtils.js";
 
-const generateabsensiSatuan = ({ month, absensi }) => {
+const generateabsensiSatuan = ({ start, end, absensi }) => {
   const doc = new jsPDF();
-  const date = moment(month, "YYYY-MM");
   moment.locale("id");
 
   doc.setFont("helvetica", "normal");
@@ -15,10 +14,13 @@ const generateabsensiSatuan = ({ month, absensi }) => {
     align: "center",
   });
   doc.setFontSize(10);
+  doc.text(`Periode ${start.format("DD MMMM YYYY")}-${end.format("DD MMMM YYYY")}`
+  , 105, 20,{
+    align: "center",
+  });
   doc.text(`${"NIK:".padEnd(10)}${absensi.nik}`, 15, 30);
   doc.text(`${"Nama:".padEnd(10)}${absensi.nama}`, 15, 35);
   doc.text(`${"Divisi:".padEnd(10)}${absensi.divisi}`, 150, 30);
-  doc.text(`${"Periode:".padEnd(10)}${date.format("MMMM YYYY")}`, 150, 35);
 
   autoTable.default(doc, {
     headStyles: { fillColor: 0 },
@@ -48,7 +50,7 @@ const generateabsensiSatuan = ({ month, absensi }) => {
   });
   //TODO: buat summary singkat jumlah absen
 
-  const filename = `${month}.pdf`;
+  const filename = `${start.format("DDMMYY")}_${end.format("DDMMYY")}.pdf`;
 
   doc.save(getAbsolutePath(`./pdf/${filename}`));
 
