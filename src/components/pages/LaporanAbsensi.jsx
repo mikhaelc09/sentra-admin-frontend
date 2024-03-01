@@ -49,8 +49,8 @@ const LaporanAbsensi = (props) => {
     const endDate = moment(`${strYear}-${strMonth}-25`, "YYYY-MM-DD")
     startDate.subtract(1, 'month')
     setPeriode({
-      start: startDate.toDate(),
-      end: endDate.toDate()
+      start: startDate,
+      end: endDate
     })
 
   }, [month])
@@ -65,8 +65,8 @@ const LaporanAbsensi = (props) => {
         pageName: "LaporanAbsensi",
         method: "POST",
         data: toFormData({
-          periodeStart: periode['start'].toISOString().split("T")[0],
-          periodeEnd: periode['end'].toISOString().split("T")[0],
+          periodeStart: periode['start'].format("YYYY-MM-DD"),
+          periodeEnd: periode['end'].format("YYYY-MM-DD"),
           nik: selectedKaryawan.value,
           type: "absensi",
         }),
