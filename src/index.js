@@ -13,29 +13,34 @@ const app = express();
 app.use(express.static(path.join(dirname, "/")));
 app.use('./pdf', express.static(path.join(dirname, "/pdf")))
 
-// const adminJSRouter = AdminJSExpress.buildRouter(adminJS);
-const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
-  authenticate: async (email, password) => {
-    const user = await db["Karyawan"].findOne({ where: { email } });
-    if (user) {
-      if (!(await bcrypt.compare(password, user.password))) 
-        return null;
-      
-      if(user.is_admin === 0) 
-        return null;
-      
-      return user
-    }
-    return null;
-  },
-  cookiePassword: process.env.JWT_SECRET,
-  cookieName: 'adminjs'
-},null,{
-  resave: true,
-  saveUninitialized: true,
-  secret: process.env.JWT_SECRET,
-  name: 'adminjs'
-});
+let adminJSRouter = null
+if(process.env.NODE_ENV == 'development'){
+  adminJSRouter = AdminJSExpress.buildRouter(adminJS);
+}
+else{
+  adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
+    authenticate: async (email, password) => {
+      const user = await db["Karyawan"].findOne({ where: { email } });
+      if (user) {
+        if (!(await bcrypt.compare(password, user.password))) 
+          return null;
+        
+        if(user.is_admin === 0) 
+          return null;
+        
+        return user
+      }
+      return null;
+    },
+    cookiePassword: process.env.JWT_SECRET,
+    cookieName: 'adminjs'
+  },null,{
+    resave: true,
+    saveUninitialized: true,
+    secret: process.env.JWT_SECRET,
+    name: 'adminjs'
+  });
+}
 
 app.get("/admin/logout", (req, res) => {
   res.redirect("/admin/login");
