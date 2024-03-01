@@ -29,12 +29,12 @@ const getDetailAbsensi = async (nik, start, end) => {
     [Sequelize.Op.and]: [
       {
         created_at: {
-          [Sequelize.Op.gte]: new Date(start.year, start.month - 1, start.day, 0, 0)
+          [Sequelize.Op.gte]: start.toDate()
         }
       },
       {
         created_at: {
-          [Sequelize.Op.lte]: new Date(end.year, end.month - 1, end.day, 23, 59)
+          [Sequelize.Op.lte]: end.toDate()
         }
       },
     ] 
@@ -222,8 +222,8 @@ const getDetailAbsensi = async (nik, start, end) => {
 
 
   const dataAbsensi = [];
-  const startDate = moment(`${start.year}-${start.month}-${start.day}`)
-  const endDate = moment(`${end.year}-${end.month}-${end.day}`)
+  const startDate = start
+  const endDate = end
   while(startDate <= endDate){
     //Append to DataAbsensi
     const absen = detail.Absensi.find((a) => a.tanggal == startDate.format("YYYY-MM-DD"));
@@ -384,28 +384,17 @@ const getLaporanAbsensi = async (request, response, data) => {
   }
 
   if (request.payload.type == "absensi") {
-    const _periodeStart = request.payload.periodeStart.split("-");
-    const periodeStart = {
-      day: _periodeStart[2],
-      month: _periodeStart[1],
-      year: _periodeStart[0]
-    }
-    const _periodeEnd = request.payload.periodeEnd.split("-");
-    const periodeEnd = {
-      day: _periodeEnd[2],
-      month: _periodeEnd[1],
-      year: _periodeEnd[0]
-    }
+    const _periodeStart = moment(request.payload.periodeStart, 'YYYY-MM-DD');
+    const _periodeEnd = moment(request.payload.periodeEnd, 'YYYY-MM-DD');
+    _periodeEnd.add(23, 'hours').add(59, 'minutes')
     const nik = request.payload.nik;
-    const absensi = await getDetailAbsensi(nik, periodeStart, periodeEnd);
-    const startDate = moment(`${periodeStart.year}-${periodeStart.month}-${periodeStart.day}`)
-    const endDate = moment(`${periodeEnd.year}-${periodeEnd.month}-${periodeEnd.day}`)
+    const absensi = await getDetailAbsensi(nik, _periodeStart, _periodeEnd);
 
     return {
       absensi,
       url: generateabsensiSatuan({
-        start: startDate,
-        end: endDate,
+        start: _periodeStart,
+        end: _periodeEnd,
         absensi,
       }),
     };
