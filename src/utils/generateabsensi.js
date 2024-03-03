@@ -2,29 +2,25 @@ import { jsPDF } from "jspdf";
 import moment from "moment";
 import { getAbsolutePath } from "./pathUtils.js";
 
-const generateabsensi = ({ month, karyawan }) => {
+const generateabsensi = ({ start, end, karyawan }) => {
   const doc = new jsPDF();
   moment.locale("id");
-  const date = moment(month, "YYYY-MM");
 
   let tableData = [];
   console.log(karyawan)
-  console.log(karyawan[0].Absensi)
   for (const k of karyawan) {
     tableData.push({
-      nik: k.Karyawan.nik,
-      nama: k.Karyawan.nama,
-      divisi: k.Karyawan.divisi,
-      masuk: `${
-        (k.Absensi.filter((a) => a.status == 1) ?? []).length
-      }    hari`,
-      lembur: `${(k.Lembur ?? []).length}    hari`,
-      cuti: `${(k.Izin ?? []).length}    hari`,
-      mcu: `${(k.MCU ?? []).length}    hari`,
+      nik: k.nik,
+      nama: k.nama,
+      divisi: k.divisi,
+      masuk: `${k.summary.hadir}    hari`,
+      lembur: `${k.summary.lembur}    hari`,
+      cuti: `${k.summary.cuti}    hari`,
+      mcu: `${k.summary.mcu}    hari`,
     });
   }
 
-  doc.text(`Laporan Absensi ${date.format("MMMM YYYY")}`, 10, 10);
+  doc.text(`Laporan Absensi ${start.format("DD MMMM YYYY")}-${end.format("DD MMMM YYYY")}`, 10, 10);
   doc.autoTable({
     startY: 20,
     body: tableData,
@@ -43,15 +39,15 @@ const generateabsensi = ({ month, karyawan }) => {
     doc.addPage();
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.text(`${"NIK:".padEnd(10)}${k.Karyawan.nik}`, 15, 20);
-    doc.text(`${"Nama:".padEnd(10)}${k.Karyawan.nama}`, 15, 25);
-    doc.text(`${"Divisi:".padEnd(10)}${k.Karyawan.divisi}`, 150, 20);
-    doc.text(`${"Periode:".padEnd(10)}${date.format("MMMM YYYY")}`, 150, 25);
+    doc.text(`${"NIK:".padEnd(10)}${k.nik}`, 15, 20);
+    doc.text(`${"Nama:".padEnd(10)}${k.nama}`, 15, 25);
+    doc.text(`${"Divisi:".padEnd(10)}${k.divisi}`, 130, 20);
+    doc.text(`${"Periode:".padEnd(10)}${start.format("DD-MM-YYYY")} sampai ${end.format("DD-MM-YYYY")}`, 130, 25);
 
     doc.autoTable({
       headStyles: { fillColor: 0 },
       startY: 30,
-      body: k.Detail,
+      body: k.DataAbsensi,
       columns: [
         { header: "Hari", dataKey: "hari" },
         { header: "Tanggal", dataKey: "tanggal" },
@@ -76,7 +72,7 @@ const generateabsensi = ({ month, karyawan }) => {
     });
   });
 
-  const filename = `${month}.pdf`;
+  const filename = `${start.format("DD MMMM YYYY")}-${end.format("DD MMMM YYYY")}.pdf`;
 
   doc.save(getAbsolutePath(`./pdf/${filename}`));
 

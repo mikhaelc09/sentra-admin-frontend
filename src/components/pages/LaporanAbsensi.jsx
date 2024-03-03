@@ -85,8 +85,8 @@ const LaporanAbsensi = (props) => {
         pageName: "LaporanAbsensi",
         method: "POST",
         data: toFormData({
-          periodeStart: periode['start'].toISOString().split("T")[0],
-          periodeEnd: periode['end'].toISOString().split("T")[0],
+          periodeStart: periode['start'].format("YYYY-MM-DD"),
+          periodeEnd: periode['end'].format("YYYY-MM-DD"),
           type: "absensiAll",
         }),
       })

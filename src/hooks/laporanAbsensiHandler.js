@@ -240,8 +240,8 @@ const getDetailAbsensi = async (nik, start, end) => {
 
 
   const dataAbsensi = [];
-  const startDate = start
-  const endDate = end
+  const startDate = start.clone()
+  const endDate = end.clone()
   while(startDate <= endDate){
     //Append to DataAbsensi
     const absen = detail.Absensi.find((a) => a.tanggal == startDate.format("YYYY-MM-DD"));
@@ -276,121 +276,15 @@ const getDetailAbsensi = async (nik, start, end) => {
  * Data akan dikirim untuk diolah menjadi laporan individu
  * Sifat data berikut merupakan summary dari seluruh karyawan
  */
-const getAbsensiReport = async (month, year) => {
-  const rawKaryawan = await db.sequelize.query(
-    "select k.nik as `Karyawan.nik`, k.nama as `Karyawan.nama`, d.nama as `Karyawan.divisi` " +
-      "from karyawan k join divisi d on k.id_divisi=d.id",
-    {
-      type: Sequelize.QueryTypes.SELECT,
-      nest: true,
-    }
-  );
+const getAbsensiReport = async (start, end) => {
+  const karyawan = await db["Karyawan"].findAll({
+    attributes: ['nik', 'nama'],
+    raw: true
+  })
 
-  const summary = rawKaryawan.reduce((acc, entry) => {
-    acc.push({
-      Karyawan: {
-        ...entry.Karyawan,
-      },
-      Absensi: [],
-      Lembur: [],
-      Izin: [],
-      MCU: [],
-    });
-    return acc;
-  }, []);
-
-  const rawAbsensi = await db.sequelize.query(
-    "select k.nik as `Karyawan.nik`, date(a.created_at) as `Absensi.tanggal`, " +
-      "a.created_at as `Absensi.jam`, a.status `Absensi.status` " +
-      "from karyawan k left join absensi a on a.nik=k.nik and a.status = 1 " +
-      "where month(a.created_at) = :month and year(a.created_at) = :year ",
-    {
-      type: Sequelize.QueryTypes.SELECT,
-      nest: true,
-      replacements: {
-        month,
-        year,
-      },
-    }
-  );
-
-  rawAbsensi.reduce((acc, entry) => {
-    const selected = acc.find(
-      (item) => item.Karyawan.nik == entry.Karyawan.nik
-    );
-
-    const index = selected.Absensi.findIndex(
-      (item) => item.tanggal == entry.Absensi.tanggal
-    );
-
-    if (index == -1) {
-      selected.Absensi.push({
-        tanggal: entry.Absensi.tanggal,
-        jam_masuk: entry.Absensi.jam,
-        jam_keluar: null,
-        status: entry.Absensi.status,
-      });
-
-      return acc;
-    }
-    selected.Absensi[index].jam_keluar = entry.Absensi.jam;
-
-    return acc;
-  }, summary);
-
-  const rawLembur = await db.sequelize.query(
-    "select k.nik, date(l.created_at) as `Lembur.tanggal`, l.status as `Lembur.status` " +
-      "from karyawan k left join lembur l on l.nik=k.nik and l.status = 2 " +
-      `where month(l.created_at) = ${month} and year(l.created_at) = ${year} ` +
-      "group by k.nik, `Lembur.tanggal` ",
-    {
-      type: Sequelize.QueryTypes.SELECT,
-      nest: true,
-    }
-  );
-
-  rawLembur.reduce((acc, entry) => {
-    const pivot = acc.find((item) => item.Karyawan.nik == entry.nik);
-    pivot.Lembur.push(entry.Lembur);
-    return acc;
-  }, summary);
-
-  const rawIzin = await db.sequelize.query(
-    "select k.nik, date(i.waktu_mulai) as `Izin.waktu_mulai`, date(i.waktu_selesai) as `Izin.waktu_selesai`,  " +
-      "i.jenis as `Izin.jenis`, i.lokasi as `Izin.lokasi`  " +
-      "from karyawan k left join izin i on i.nik_pengaju=k.nik and i.status = 2 " +
-      `where month(i.waktu_mulai) = ${month} and year(i.waktu_mulai) = ${year} `,
-    {
-      type: Sequelize.QueryTypes.SELECT,
-      nest: true,
-    }
-  );
-
-  
-  rawIzin.reduce((acc, entry) => {
-    const pivot = acc.find((item) => item.Karyawan.nik == entry.nik);
-    if (entry.Izin.jenis == 1) {
-      pivot.Izin.push({
-        waktu_mulai: entry.Izin.waktu_mulai,
-        waktu_selesai: entry.Izin.waktu_selesai,
-      });
-    } else {
-      pivot.MCU.push({
-        waktu_mulai: entry.Izin.waktu_mulai,
-        waktu_selesai: entry.Izin.waktu_selesai,
-        lokasi: entry.Izin.lokasi,
-      });
-    }
-
-    return acc;
-  }, summary);
-
-  const response = await Promise.all(summary.map(async (a) => {
-    const detail = await getDetailAbsensi(month, year, a.Karyawan.nik)
-    return {
-      ...a,
-      Detail: detail.DataAbsensi
-    }
+  const response = await Promise.all(karyawan.map(async (a) => {
+    const detail = await getDetailAbsensi(a.nik, start, end)
+    return detail
   }))
 
   return response;
@@ -421,15 +315,16 @@ const getLaporanAbsensi = async (request, response, data) => {
   }
 
   if (request.payload.type == "absensiAll") {
-    const periode = request.payload.month;
-    const month = periode.split("-")[1];
-    const year = periode.split("-")[0];
-    const karyawan = await getAbsensiReport(month, year);
+    const _periodeStart = moment(request.payload.periodeStart, 'YYYY-MM-DD');
+    const _periodeEnd = moment(request.payload.periodeEnd, 'YYYY-MM-DD');
+    _periodeEnd.add(23, 'hours').add(59, 'minutes')
+    const karyawan = await getAbsensiReport(_periodeStart, _periodeEnd);
 
     return {
       karyawan,
       url: generateabsensi({
-        month: periode,
+        start: _periodeStart,
+        end: _periodeEnd,
         karyawan,
       }),
     };
