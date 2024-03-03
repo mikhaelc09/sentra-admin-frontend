@@ -57,6 +57,13 @@ const getDetailAbsensi = async (nik, start, end) => {
     nama: rawKaryawan.nama,
     divisi: rawKaryawan['Divisi.nama'],
     Absensi: [],
+    summary: {
+      hadir: 0,
+      tidak_hadir: 0,
+      lembur: 0,
+      cuti: 0,
+      mcu: 0
+    }
   };
 
   const rawAbsensi = await db["Absensi"].findAll(
@@ -87,6 +94,8 @@ const getDetailAbsensi = async (nik, start, end) => {
         lembur: false
       });
 
+      acc.summary.hadir += 1;
+
       return acc;
     }
     acc.Absensi[index].jam_keluar = entry.jam;
@@ -113,7 +122,10 @@ const getDetailAbsensi = async (nik, start, end) => {
       return item.tanggal == l.tanggal;
     });
 
-    if (index != -1) acc.Absensi[index].lembur = true;
+    if (index != -1) {
+      acc.Absensi[index].lembur = true;
+      acc.summary.lembur += 1;
+    }
 
     return acc;
   }, detail);
@@ -158,6 +170,7 @@ const getDetailAbsensi = async (nik, start, end) => {
         data.lokasi = item.lokasi;
       }
       acc.Absensi.push(data);
+      acc.summary[item.jenis == 1 ? "cuti" : "mcu"] += 1;
     }
 
     return acc;
@@ -233,7 +246,7 @@ const getDetailAbsensi = async (nik, start, end) => {
     //Append to DataAbsensi
     const absen = detail.Absensi.find((a) => a.tanggal == startDate.format("YYYY-MM-DD"));
     if (absen) dataAbsensi.push(absen);
-    else
+    else{
       dataAbsensi.push({
         hari: moment(startDate).format("dddd"),
         tanggal: startDate.format("YYYY-MM-DD"),
@@ -244,6 +257,8 @@ const getDetailAbsensi = async (nik, start, end) => {
         keterangan: "",
         jenis: "Tidak Hadir",
       });
+      detail.summary.tidak_hadir += 1;
+    }
     //Add startDate
     startDate.add(1, 'day')
   }

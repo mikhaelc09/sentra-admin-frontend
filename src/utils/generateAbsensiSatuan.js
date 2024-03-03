@@ -49,6 +49,11 @@ const generateabsensiSatuan = ({ start, end, absensi }) => {
     },
   });
   //TODO: buat summary singkat jumlah absen
+  doc.text(`Hadir: ${absensi.summary.hadir}`, 15, doc.lastAutoTable.finalY + 8);
+  doc.text(`Lembur: ${absensi.summary.lembur}`, 55, doc.lastAutoTable.finalY + 8);
+  doc.text(`Tidak Hadir: ${absensi.summary.tidak_hadir}`, 95, doc.lastAutoTable.finalY + 8);
+  doc.text(`Cuti :${absensi.summary.cuti}`, 135, doc.lastAutoTable.finalY + 8);
+  doc.text(`MCU: ${absensi.summary.mcu}`, 175, doc.lastAutoTable.finalY + 8);
 
   const filename = `${start.format("DDMMYY")}_${end.format("DDMMYY")}.pdf`;
 
