@@ -123,7 +123,12 @@ const getDetailAbsensi = async (nik, start, end) => {
       where: {
         status: 2,
         nik_pengaju: nik,
-        ...queryTanggal
+        waktu_mulai: {
+          [Sequelize.Op.lte]: end.toDate()
+        },
+        waktu_selesai: {
+          [Sequelize.Op.gte]: start.toDate()
+        }
       },
       attributes: [
         [Sequelize.fn('date', Sequelize.col('waktu_mulai')), 'waktu_mulai'],
@@ -199,7 +204,7 @@ const getDetailAbsensi = async (nik, start, end) => {
     }
 
     // Jika absensi tidak lengkap, maka tambahkan keterangan
-    if (!(a.jam_masuk && a.jam_keluar)) {
+    if (!(a.jam_masuk && a.jam_keluar) && !a.jenis) {
       // Jika keterangan sudah ada, maka tambahkan delimiter
       if (a.keterangan) a.keterangan += ", ";
       else a.keterangan = "";
