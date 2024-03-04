@@ -1,8 +1,8 @@
 import generateabsensi from "../utils/generateabsensi.js";
 import generateabsensiSatuan from "../utils/generateAbsensiSatuan.js";
 import db from "../models/index.js";
-import util from "util";
 import moment from "moment";
+import * as XLSX from 'xlsx';
 const Sequelize = db.Sequelize;
 
 moment.locale("id");  
@@ -267,6 +267,32 @@ const getDetailAbsensi = async (nik, start, end) => {
   return detail;
 };
 
+const generatePenggajianExcel = async (karyawan, start, end) => {
+  const fileName = `penggajian_${start.format("DDMMYY")}_${end.format("DDMMYY")}.xlsx`;
+  // const columnName = ["NOMOR","NAMA","JABATAN", "HARI KERJA","ABSEN/CUTI","GAJI POKOK","T JABATAN","T PERUSAHAAN","TRANSPORT","MAKAN","LEMBUR","FEE MCU","KERJA HARI MINGGU","POTONGAN","BPJS","LAIN-LAIN","TOTAL GAJI","TOTAL POTONGAN","PPH 21","GRAND TOTAL","KETERANGAN"]
+  // const columns = columnName.map((a) => {
+  //   return {
+  //     name: a,
+  //     fontWeight: 'bold'
+  //   }
+  // })
+  // const data = []
+
+  // const xlsxblob = await writeXlsxFile(data, {
+  //   columns
+  // });
+
+  const data = [[1,2,3],[4,5,6]]
+  const worksheet = XLSX.utils.aoa_to_sheet(data)
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1")
+  XLSX.writeFile(workbook, `./public/excel/${fileName}`, {compression:true})
+
+  return {
+    url: 'public/excel/coba.xlsx'
+  }
+}
+
 
 /**
  * *AbsensiAll
@@ -328,6 +354,16 @@ const getLaporanAbsensi = async (request, response, data) => {
         karyawan,
       }),
     };
+  }
+
+  if(request.payload.type == "penggajian"){
+    const _periodeStart = moment(request.payload.periodeStart, 'YYYY-MM-DD');
+    const _periodeEnd = moment(request.payload.periodeEnd, 'YYYY-MM-DD');
+    _periodeEnd.add(23, 'hours').add(59, 'minutes')
+    const karyawan = await getAbsensiReport(_periodeStart, _periodeEnd);
+    const excel = await generatePenggajianExcel(karyawan, _periodeStart, _periodeEnd);
+
+    return response.download(excel.url)
   }
   return "_";
 };

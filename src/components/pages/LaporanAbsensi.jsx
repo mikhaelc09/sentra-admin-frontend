@@ -98,6 +98,35 @@ const LaporanAbsensi = (props) => {
       });
   };
 
+  const generatePenggajian = () => {
+    const start = periode['start'].format("YYYY-MM-DD")
+    const end = periode['end'].format("YYYY-MM-DD")
+    api
+      .getPage({
+        pageName: "LaporanAbsensi",
+        responseType: "blob",
+        method: "POST",
+        data: toFormData({
+          periodeStart: periode['start'].format("YYYY-MM-DD"),
+          periodeEnd: periode['end'].format("YYYY-MM-DD"),
+          type: "penggajian",
+        },),
+      })
+      .then((response) => {
+        const href = URL.createObjectURL(response.data);
+        const a = document.createElement("a");
+        a.href = href;
+        a.download = `Penggajian_${start}_${end}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(href);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   /**
    * Components
    */
@@ -156,7 +185,7 @@ const LaporanAbsensi = (props) => {
   const PenggajianControl = () => {
     return (
       <Control label="Laporan Penggajian">
-        <Button onClick={generateAbsensi} variant="contained" disabled>
+        <Button onClick={generatePenggajian} variant="contained">
           Generate
         </Button>
       </Control>

@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.static(path.join(dirname, "/")));
 app.use('./pdf', express.static(path.join(dirname, "/pdf")))
+app.use('../public/excel', express.static(path.join(dirname, "/excel")))
 
 let adminJSRouter = null
 if(process.env.NODE_ENV == 'development'){

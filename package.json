@@ -41,7 +41,7 @@
     "read-excel-file": "^5.7.1",
     "recharts": "^2.6.2",
     "sequelize": "^6.30.0",
-    "write-excel-file": "^1.4.27"
+    "xlsx": "^0.18.5"
   },
   "type": "module",
   "devDependencies": {
