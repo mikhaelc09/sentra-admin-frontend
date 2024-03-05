@@ -269,27 +269,125 @@ const getDetailAbsensi = async (nik, start, end) => {
 
 const generatePenggajianExcel = async (karyawan, start, end) => {
   const fileName = `penggajian_${start.format("DDMMYY")}_${end.format("DDMMYY")}.xlsx`;
-  // const columnName = ["NOMOR","NAMA","JABATAN", "HARI KERJA","ABSEN/CUTI","GAJI POKOK","T JABATAN","T PERUSAHAAN","TRANSPORT","MAKAN","LEMBUR","FEE MCU","KERJA HARI MINGGU","POTONGAN","BPJS","LAIN-LAIN","TOTAL GAJI","TOTAL POTONGAN","PPH 21","GRAND TOTAL","KETERANGAN"]
-  // const columns = columnName.map((a) => {
-  //   return {
-  //     name: a,
-  //     fontWeight: 'bold'
-  //   }
-  // })
-  // const data = []
+  const rawGaji = await db["HPenggajian"].findAll({
+    where: {
+      tanggal: {
+        [Sequelize.Op.gte]: start.toDate(),
+        [Sequelize.Op.lte]: end.toDate()
+      }
+    },
+    include: {
+      model: db["DPenggajian"],
+      attributes: ['judul', 'keterangan', 'subtotal'],
+      nested: true
+    },
+    raw: true,
+    nest: true,
+  })
+  const gaji = []
+  rawGaji.reduce((acc, val) => {
+    const index = acc.findIndex(g => g.id == val.id)
+    if(index == -1){
+      const newItem = {
+        id: val.id,
+        nik: val.nik,
+        total: val.total,
+        gajilain: [],
+        potonganlain: [],
+        }
+      newItem[val.DPenggajians.judul] = val.DPenggajians.subtotal
+      acc.push(newItem)
+    }
+    else{
+      if(val.DPenggajians.judul.substr(0, 3) == "$G_") {
+        acc[index]["gajilain"].push(val.DPenggajians)
+      }
+      else if(val.DPenggajians.judul.substr(0, 3) == "$P_"){
+        acc[index]["potonganlain"].push(val.DPenggajians)
+      }
+      else{
+        acc[index][val.DPenggajians.judul] = val.DPenggajians.subtotal
+      }
+    }
 
-  // const xlsxblob = await writeXlsxFile(data, {
-  //   columns
-  // });
+    return acc
+  }, gaji);
 
-  const data = [[1,2,3],[4,5,6]]
-  const worksheet = XLSX.utils.aoa_to_sheet(data)
+  let data = karyawan.map(k => {
+    return {
+      NOMOR: k.nik,
+      NAMA: k.nama,
+      JABATAN: k.divisi,
+      "HARI KERJA": k.summary.hadir,
+      "ABSEN/CUTI": k.summary.tidak_hadir + k.summary.cuti,
+      "GAJI POKOK": 0,
+      "T JABATAN": 0,
+      "T PERUSAHAAN": 0,
+      "TRANSPORT": 0,
+      "MAKAN": 0,
+      "LEMBUR": 0,
+      "FEE MCU": 0,
+      "KERJA HARI MINGGU": 0,
+      "GAJI LAIN-LAIN": 0,
+      "POTONGAN": 0,
+      "BPJS": 0,
+      "POTONGAN LAIN-LAIN": 0,
+      "TOTAL GAJI": 0,
+      "TOTAL POTONGAN": 0,
+      "PPH 21": 0,
+      "GRAND TOTAL": 0,
+      "KETERANGAN": ""
+    }
+  })
+
+  gaji.reduce((acc, val) => { 
+    const index = acc.findIndex(k => k.NOMOR == val.nik)
+    if (val.nik == '1149715837'){
+      console.log(val)
+    }
+    if(index != -1){
+      acc[index]["GAJI POKOK"] = val["Gaji Pokok"]
+      acc[index]["T JABATAN"] = val["Tunjangan Jabatan"]
+      acc[index]["T PERUSAHAAN"] = val["Tunjangan Perusahaan"]
+      acc[index]["TRANSPORT"] = val["Uang Transportasi"]
+      acc[index]["MAKAN"] = val["Uang Makan"]
+      acc[index]["LEMBUR"] = val["Fee Lembur"]
+      acc[index]["FEE MCU"] = val["Fee MCU"]
+      acc[index]["GAJI LAIN-LAIN"] = val["gajilain"].reduce((acc, val) => {
+        return acc + val.subtotal
+      }, 0)
+      acc[index]["POTONGAN"] = val["Potongan"]
+      acc[index]["BPJS"] = val["BPJS Kesehatan"] * -1
+      acc[index]["POTONGAN LAIN-LAIN"] = val["potonganlain"].reduce((acc, val) => {
+        return acc + val.subtotal
+      }, 0)
+      acc[index]["PPH 21"] = val["Pajak PPH21"]
+      acc[index]["GRAND TOTAL"] = val["total"]
+
+      acc[index]["TOTAL GAJI"] = acc[index]["GAJI POKOK"] +
+         acc[index]["T JABATAN"] +
+         acc[index]["T PERUSAHAAN"] +
+         acc[index]["TRANSPORT"] +
+         acc[index]["MAKAN"] +
+         acc[index]["LEMBUR"] +
+         acc[index]["FEE MCU"] +
+         acc[index]["GAJI LAIN-LAIN"] 
+      acc[index]["TOTAL POTONGAN"] = acc[index]["POTONGAN"] +
+       acc[index]["BPJS"] +
+       acc[index]["POTONGAN LAIN-LAIN"] +
+       acc[index]["PPH 21"] 
+    }
+
+    return acc
+  }, data)
+
+  const worksheet = XLSX.utils.json_to_sheet(data)
   const workbook = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1")
   XLSX.writeFile(workbook, `./public/excel/${fileName}`, {compression:true})
 
   return {
-    url: 'public/excel/coba.xlsx'
+    url: `public/excel/${fileName}`
   }
 }
 
