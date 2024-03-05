@@ -41,7 +41,8 @@
     "read-excel-file": "^5.7.1",
     "recharts": "^2.6.2",
     "sequelize": "^6.30.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-js-style": "^1.2.0"
   },
   "type": "module",
   "devDependencies": {
